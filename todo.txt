@@ -1,0 +1,12 @@
+
+
+notes
+-----
+* macro methods:
+  * annotated with @macro
+  * all parameters of formal type 'Object'
+  * invocation: first parameter 'null'
+  * implementation: first parameter 'MacroContext', other parameters 'JCExpression'
+  * return type 'JCExpression'
+
+  * how to get the compiler to process files in the 'right' order?! Does that happen automatically based on dependencies (if there are no cycles)?
