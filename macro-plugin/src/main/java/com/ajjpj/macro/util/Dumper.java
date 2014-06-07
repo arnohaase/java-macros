@@ -1,36 +1,16 @@
-package com.ajjpj.macro;
+package com.ajjpj.macro.util;
 
 import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.CompilationUnitTree;
 import com.sun.source.tree.Tree;
-import com.sun.source.tree.TreeVisitor;
-import com.sun.source.util.*;
+import com.sun.source.util.TreeScanner;
 import com.sun.tools.javac.tree.JCTree;
 
 /**
  * @author arno
  */
-public class MacroPlugin implements Plugin {
-    @Override public String getName() {
-        return "MacroPlugin";
-    }
-
-    @Override public void init(JavacTask task, String... args) {
-        task.addTaskListener(new TaskListener() {
-            @Override public void started(TaskEvent e) {
-                System.out.println("start " + e);
-                dump(e.getCompilationUnit());
-            }
-
-            @Override public void finished(TaskEvent e) {
-                System.out.println("end " + e);
-                dump(e.getCompilationUnit());
-
-            }
-        });
-    }
-
-    private void dump(CompilationUnitTree cut) {
+public class Dumper {
+    public static void dump(CompilationUnitTree cut) {
         final TreeScanner<?, ?> scanner = new TreeScanner<Object, Object>() {
             int indent = 0;
 
@@ -76,6 +56,5 @@ public class MacroPlugin implements Plugin {
         System.out.println("----------------------------------");
         System.out.println();
     }
-
 
 }

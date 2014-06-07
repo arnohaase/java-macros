@@ -10,3 +10,25 @@ notes
   * return type 'JCExpression'
 
   * how to get the compiler to process files in the 'right' order?! Does that happen automatically based on dependencies (if there are no cycles)?
+
+  * method macros: generate synthetic method with 'callable' signature (n-1 params) --> satisfy IDE tooling
+    * initially: 'Object' as type for all parameters
+    * later: analyze generic signature of 'Tree' param of the actual parameter
+
+  * configurable phase of application
+
+  * 'CompilerContext' type as first parameter
+    * factory for AST nodes
+    * emit warnings and errors
+    * convenience: support for parsing and entering of new code (--> Scala macros)
+    * Symtab
+    * TreeMaker
+
+  * TreeMaker
+
+* samples / poc
+  * method macros
+    * log.debug(...) --> if(log.isDebug()) ...
+    * strings with ${...}
+  * class macros
+    * @ImmutableStruct
