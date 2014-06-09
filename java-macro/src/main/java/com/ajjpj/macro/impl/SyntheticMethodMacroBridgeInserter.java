@@ -71,7 +71,7 @@ class SyntheticMethodMacroBridgeInserter extends TreeTranslator {
                         List.of(stmt));
 
         final MethodBuilder methodBuilder = new MethodBuilder (context, macroMethod.name, returnType, impl);
-        methodBuilder.setFlags(Flags.PUBLIC | Flags.STATIC | Flags.SYNTHETIC);
+        methodBuilder.setFlags(Flags.PUBLIC | Flags.STATIC);
 
         for(JCTree.JCVariableDecl origParam: macroMethod.getParameters().tail) {
             //TODO error handling; make this more robust

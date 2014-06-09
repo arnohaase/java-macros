@@ -1,13 +1,17 @@
 todo
 ----
-* merge 'plugin' and 'annot-proc'
-* generate synthetic method for macros (is this necessary?)
-* test them
+* actually implement a method macro
+* implement application fo that method macro
 
 * special tests
   * test several macro methods in one class
   * test macro method in nested class
 
+* remove explicit annotation processor from maven build
+
+done
+----
+* generate synthetic method for macros (is this necessary?)
 
 notes
 -----
@@ -77,3 +81,5 @@ notes
   * maven build for annotation processor
     * META-INF/services/...Processor should be included in JAR but must not be present during compilation (bootstrapping problem)
     * add <proc>none</proc> to the compiler plugin configuration
+
+  * inserting methods: flag 'SYNTHETIC' apparently hides a method from being called explicitly from code

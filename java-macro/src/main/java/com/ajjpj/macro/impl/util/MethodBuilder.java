@@ -20,7 +20,7 @@ public class MethodBuilder {
     private final Enter enter;
     private final MemberEnter memberEnter;
 
-    private long flags = Flags.PUBLIC | Flags.SYNTHETIC;
+    private long flags = Flags.PUBLIC;
     private List<JCTree.JCAnnotation> annotations = List.nil();
 
     private final Name name;
