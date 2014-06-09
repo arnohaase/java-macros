@@ -39,16 +39,12 @@ class MacroMethodCompiler {
     private void createSynthetic(MethodWithOwner mwo, JCTree.JCCompilationUnit compilationUnit) {
         final JCTree.JCMethodDecl mtd = mwo.method;
 
-        final Type.MethodType origType = (Type.MethodType) mtd.sym.type;
-
 //        final Type.MethodType synthType = new Type.MethodType(List.<Type>nil(), origType.restype, List.<Type>nil(), origType.tsym);
 //        final Symbol.MethodSymbol synthSym = new Symbol.MethodSymbol(mtd.sym.flags(), mtd.sym.name, synthType, mtd.sym.owner);
 
         final Names names = Names.instance(context);
         final Symtab syms = Symtab.instance(context);
-
         final Enter enter = Enter.instance(context);
-
         final Env env = enter.getEnv(mwo.owner.sym);
 
         final JCTree.JCBlock impl = make.Block(0, List.<JCTree.JCStatement>of(make.Return(make.Literal(TypeTag.INT, 42)))); //  make.Ident(names.fromString("null")))));
@@ -73,8 +69,8 @@ class MacroMethodCompiler {
 
         memberEnter(synthetic, env);
 
-        final Scope scope = mwo.owner.sym.members();
-        scope.enter(synthetic.sym);
+//        final Scope scope = mwo.owner.sym.members();
+//        scope.enter(synthetic.sym);
 
 //        enclScope.enter() // --> MethodEnter.visitMethodDef, line 563
 //        Scope.enter, l. 210

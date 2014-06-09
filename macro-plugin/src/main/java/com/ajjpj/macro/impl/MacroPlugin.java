@@ -54,7 +54,7 @@ public class MacroPlugin implements Plugin {
 //                    System.out.println("macro methods: " + mmc.macroMethods);
                 }
 
-                Dumper.dump(e.getCompilationUnit());
+//                Dumper.dump(e.getCompilationUnit());
             }
         });
     }

@@ -3,13 +3,11 @@
 notes
 -----
 * macro methods:
-  * annotated with @macro
-  * all parameters of formal type 'Object'
-  * invocation: first parameter 'null'
   * implementation: first parameter 'MacroContext', other parameters 'JCExpression'
   * return type 'JCExpression'
 
   * how to get the compiler to process files in the 'right' order?! Does that happen automatically based on dependencies (if there are no cycles)?
+    * require macros to be pre-compiled, i.e. on the class path?
 
   * method macros: generate synthetic method with 'callable' signature (n-1 params) --> satisfy IDE tooling
     * initially: 'Object' as type for all parameters
@@ -32,3 +30,31 @@ notes
     * strings with ${...}
   * class macros
     * @ImmutableStruct
+
+* documentation
+  * Name: efficient string storage
+  * Symbol
+    * Type Hierarchy
+    * iniatialized in phase 'Enter'
+      * ClassSymbols are eagerly initialized in Enter itself
+      * for members (methods in particular), symbols are lazily initialized
+        * --> symbols (MethodSymbol in particular) have a field 'completer'
+        * if not-null, the completer is called once lazily and then set to null
+        * only implementation is MemberEnter
+      * MethodSymbol is initialized in MemberEnter.memberEnter (protected visibility)
+  * Type
+  * Scope
+    * byte code is generated only for members contained in a class' scope
+  * Env
+
+  * creating a synthetic method for a class that has just passed Enter phase
+    * create an AST for the body
+    * make.MethodDef (variant without method symbol!)
+    * prepend to the defs of the owning JCClassDecl
+    * get the class' environment by calling enter.getEnv(owner.sym)  // TODO possible optimization by setting flags in enter before the call?
+    * call memberEnter.memberEnter(methodTree, env) --> use reflection because that does not have public visibility
+
+  * Xyz.instance(context) is meant to allow replacing some component with a modified version / subclass
+    * only works before JavaCompiler is instantiated
+    * --> i.e. in a separate Main method
+    * neither from compiler plugins nor from annotation processors
