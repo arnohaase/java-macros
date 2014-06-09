@@ -4,6 +4,10 @@ todo
 * generate synthetic method for macros (is this necessary?)
 * test them
 
+* special tests
+  * test several macro methods in one class
+  * test macro method in nested class
+
 
 notes
 -----

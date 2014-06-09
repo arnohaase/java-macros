@@ -101,7 +101,7 @@ class MacroMethodCompiler {
 
     private void memberEnter(JCTree.JCMethodDecl synthetic, Env classEnv) {
         try {
-            final MemberEnter memberEnter = MemberEnter.instance(context);
+            final MemberEnter memberEnter = MemberEnter.instance (context);
 
             final Method reflectMethodForMemberEnter = memberEnter.getClass().getDeclaredMethod("memberEnter", JCTree.class, Env.class);
             reflectMethodForMemberEnter.setAccessible (true);
