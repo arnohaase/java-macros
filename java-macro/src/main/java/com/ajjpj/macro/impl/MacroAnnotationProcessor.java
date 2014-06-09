@@ -60,44 +60,6 @@ public class MacroAnnotationProcessor extends AbstractProcessor {
 
             final JCTree.JCClassDecl tree = (JCTree.JCClassDecl) trees.getTree(rootEl);
 
- 
-
-
-//            final JCTree.JCStatement stmt = make.Throw(
-//                    make.NewClass(
-//                            null,
-//                            null,
-//                            make.Ident (names.fromString (UnsupportedOperationException.class.getSimpleName())),
-//                            List.nil(),
-//                            null));
-//
-//            final JCTree.JCBlock impl =
-//                    make.Block (
-//                            0,
-//                            List.of(stmt));
-//
-//            final Symtab syms = Symtab.instance(context);
-//
-//            final JCTree.JCMethodDecl synthetic = make.
-//                    MethodDef(make.Modifiers(Flags.PUBLIC | Flags.STATIC),
-//                            names.fromString("mySynthetic"),
-//                            make.Type(syms.intType),
-//                            List.<JCTree.JCTypeParameter>nil(),
-//                            List.of(make.VarDef(make.Modifiers(Flags.PARAMETER | Flags.MANDATED),
-//                                    names.fromString("name"),
-//                                    make.Type(syms.stringType),
-//                                    null)),
-//                            List.<JCTree.JCExpression>nil(), // thrown
-//                            impl,
-//                            null);
-//
-//            tree.defs = tree.defs.prepend (synthetic);
-//            memberEnter (synthetic, enter.getEnv (tree.sym)); //TODO optimization: set flag in 'enter'?
-//
-//            System.out.println(tree);
-
-
-
             tree.accept(new SyntheticMethodMacroBridgeInserter(context, tree));
         }
 

@@ -1,9 +1,9 @@
 package com.ajjpj.macro.impl;
 
 import com.ajjpj.macro.MethodMacro;
+import com.ajjpj.macro.impl.util.MethodBuilder;
 import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.code.Symtab;
-import com.sun.tools.javac.comp.Enter;
 import com.sun.tools.javac.comp.Env;
 import com.sun.tools.javac.comp.MemberEnter;
 import com.sun.tools.javac.tree.JCTree;
@@ -20,9 +20,9 @@ import java.lang.reflect.Method;
  * @author arno
  */
 class SyntheticMethodMacroBridgeInserter extends TreeTranslator {
+    private final Context context;
     private final TreeMaker make;
     private final Names names;
-    private final Enter enter;
     private final MemberEnter memberEnter;
     private final Symtab syms;
     private final JCTree.JCClassDecl classDecl;
@@ -30,10 +30,10 @@ class SyntheticMethodMacroBridgeInserter extends TreeTranslator {
     private List<JCTree.JCMethodDecl> macroMethods = List.nil();
 
     SyntheticMethodMacroBridgeInserter (Context context, JCTree.JCClassDecl classDecl) {
+        this.context = context;
         this.classDecl = classDecl;
         make = TreeMaker.instance (context);
         names = Names.instance (context);
-        enter = Enter.instance (context);
         memberEnter = MemberEnter.instance (context);
         syms = Symtab.instance (context);
     }
@@ -76,32 +76,11 @@ class SyntheticMethodMacroBridgeInserter extends TreeTranslator {
                         0,
                         List.of(stmt));
 
-        final JCTree.JCMethodDecl synthetic = make.
-                MethodDef(make.Modifiers(Flags.PUBLIC | Flags.STATIC | Flags.SYNTHETIC),
-                        macroMethod.name,
-                        make.Type(syms.intType),
-                        List.<JCTree.JCTypeParameter>nil(),
-                        List.of(make.VarDef(make.Modifiers(Flags.PARAMETER | Flags.MANDATED),
-                                names.fromString("name"),
-                                make.Type(syms.stringType),
-                                null)),
-                        List.<JCTree.JCExpression>nil(), // thrown
-                        impl,
-                        null);
+        final MethodBuilder methodBuilder = new MethodBuilder (context, macroMethod.name, syms.intType, impl);
+        methodBuilder.setFlags(Flags.PUBLIC | Flags.STATIC | Flags.SYNTHETIC);
+        methodBuilder.addParam("asdf", syms.stringType);
 
-        classDecl.defs = classDecl.defs.prepend (synthetic);
-        memberEnter(synthetic, enter.getEnv(classDecl.sym)); //TODO optimization: set flag in 'enter'?
-    }
-
-    private void memberEnter(JCTree.JCMethodDecl synthetic, Env classEnv) {
-        try {
-            final Method reflectMethodForMemberEnter = memberEnter.getClass().getDeclaredMethod ("memberEnter", JCTree.class, Env.class);
-            reflectMethodForMemberEnter.setAccessible (true);
-            reflectMethodForMemberEnter.invoke(memberEnter, synthetic, classEnv);
-        }
-        catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        methodBuilder.buildIntoClass(classDecl);
     }
 
     boolean isMethodMacro(JCTree.JCMethodDecl mtd) {
