@@ -39,6 +39,29 @@ class MacroMethodCompiler {
     private void createSynthetic(MethodWithOwner mwo, JCTree.JCCompilationUnit compilationUnit) {
         final JCTree.JCMethodDecl mtd = mwo.method;
 
+        final Names names = Names.instance(context);
+        final Symtab syms = Symtab.instance(context);
+        final Enter enter = Enter.instance(context);
+        final Env env = enter.getEnv(mwo.owner.sym);
+
+        final JCTree.JCBlock impl =
+                make.Block (
+                        0,
+                        List.of(make.Throw (
+                                make.NewClass (
+                                        null,
+                                        null,
+                                        make.Ident (names.fromString (UnsupportedOperationException.class.getSimpleName())),
+                                        List.nil(),
+                                        null)))
+                );
+
+        mtd.body = impl;
+    }
+
+    private void createSynthetic2(MethodWithOwner mwo, JCTree.JCCompilationUnit compilationUnit) {
+        final JCTree.JCMethodDecl mtd = mwo.method;
+
 //        final Type.MethodType synthType = new Type.MethodType(List.<Type>nil(), origType.restype, List.<Type>nil(), origType.tsym);
 //        final Symbol.MethodSymbol synthSym = new Symbol.MethodSymbol(mtd.sym.flags(), mtd.sym.name, synthType, mtd.sym.owner);
 
@@ -74,15 +97,6 @@ class MacroMethodCompiler {
 
 //        enclScope.enter() // --> MethodEnter.visitMethodDef, line 563
 //        Scope.enter, l. 210
-
-
-
-        System.out.println(synthetic);
-        System.out.println("--");
-        System.out.println(mwo.owner);
-        System.out.println("--");
-        System.out.println(mwo.owner.defs);
-        System.out.println("--");
     }
 
     private void memberEnter(JCTree.JCMethodDecl synthetic, Env classEnv) {

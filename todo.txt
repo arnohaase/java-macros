@@ -46,6 +46,8 @@ notes
   * Scope
     * byte code is generated only for members contained in a class' scope
   * Env
+  * Resolve: 'helper class for name resolution', i.e. <whatever> to Symbol
+  * Name: always *simple* name - fully qualified names are an AST of their own!
 
   * creating a synthetic method for a class that has just passed Enter phase
     * create an AST for the body
@@ -58,3 +60,7 @@ notes
     * only works before JavaCompiler is instantiated
     * --> i.e. in a separate Main method
     * neither from compiler plugins nor from annotation processors
+
+  * javac: -XD is the 'back door' to the compiler's options --> -XDx=y
+    * javac -verbose
+    * javac -XDverboseCompilePolicy=true

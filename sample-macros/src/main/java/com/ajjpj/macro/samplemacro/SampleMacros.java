@@ -14,6 +14,5 @@ public class SampleMacros {
     }
 
     public static void asdf(String abc) {
-
     }
 }
