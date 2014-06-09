@@ -3,17 +3,13 @@ package com.ajjpj.macro.impl;
 import com.ajjpj.macro.MethodMacro;
 import com.ajjpj.macro.impl.util.MethodBuilder;
 import com.sun.tools.javac.code.Flags;
-import com.sun.tools.javac.code.Symtab;
-import com.sun.tools.javac.comp.Env;
-import com.sun.tools.javac.comp.MemberEnter;
+import com.sun.tools.javac.code.Type;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.TreeMaker;
 import com.sun.tools.javac.tree.TreeTranslator;
 import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.List;
 import com.sun.tools.javac.util.Names;
-
-import java.lang.reflect.Method;
 
 
 /**
@@ -23,8 +19,6 @@ class SyntheticMethodMacroBridgeInserter extends TreeTranslator {
     private final Context context;
     private final TreeMaker make;
     private final Names names;
-    private final MemberEnter memberEnter;
-    private final Symtab syms;
     private final JCTree.JCClassDecl classDecl;
 
     private List<JCTree.JCMethodDecl> macroMethods = List.nil();
@@ -34,8 +28,6 @@ class SyntheticMethodMacroBridgeInserter extends TreeTranslator {
         this.classDecl = classDecl;
         make = TreeMaker.instance (context);
         names = Names.instance (context);
-        memberEnter = MemberEnter.instance (context);
-        syms = Symtab.instance (context);
     }
 
     @Override public void visitClassDef(JCTree.JCClassDecl tree) {
@@ -63,6 +55,8 @@ class SyntheticMethodMacroBridgeInserter extends TreeTranslator {
     }
 
     private void createSyntheticBridge (JCTree.JCMethodDecl macroMethod) {
+        final Type returnType = macroMethod.restype.type.getTypeArguments().head; // TODO make this more robust; error handling
+
         final JCTree.JCStatement stmt = make.Throw(
                 make.NewClass(
                         null,
@@ -76,12 +70,18 @@ class SyntheticMethodMacroBridgeInserter extends TreeTranslator {
                         0,
                         List.of(stmt));
 
-        final MethodBuilder methodBuilder = new MethodBuilder (context, macroMethod.name, syms.intType, impl);
+        final MethodBuilder methodBuilder = new MethodBuilder (context, macroMethod.name, returnType, impl);
         methodBuilder.setFlags(Flags.PUBLIC | Flags.STATIC | Flags.SYNTHETIC);
-        methodBuilder.addParam("asdf", syms.stringType);
+
+        for(JCTree.JCVariableDecl origParam: macroMethod.getParameters().tail) {
+            //TODO error handling; make this more robust
+            methodBuilder.addParam (origParam.name, origParam.getType().type.getTypeArguments().head);
+        }
 
         methodBuilder.buildIntoClass(classDecl);
     }
+
+
 
     boolean isMethodMacro(JCTree.JCMethodDecl mtd) {
         if (! hasMacroMethodAnnotation (mtd)) {

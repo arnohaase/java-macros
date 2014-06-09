@@ -45,9 +45,12 @@ public class MethodBuilder {
     }
 
     public void addParam(String paramName, Type type) {
+        addParam (names.fromString (paramName), type);
+    }
+    public void addParam(Name paramName, Type type) {
         params.add(make.VarDef(
                 make.Modifiers (Flags.PARAMETER | Flags.MANDATED),
-                names.fromString (paramName),
+                paramName,
                 make.Type (type),
                 null));
     }

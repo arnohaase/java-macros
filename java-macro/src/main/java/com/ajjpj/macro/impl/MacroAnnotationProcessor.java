@@ -30,10 +30,7 @@ import java.util.Set;
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class MacroAnnotationProcessor extends AbstractProcessor {
     private Trees trees;
-    private TreeMaker make;
-    private Names names;
     private Context context;
-    private Enter enter;
     private MemberEnter memberEnter;
 
     @Override public synchronized void init (ProcessingEnvironment env) {
@@ -42,9 +39,6 @@ public class MacroAnnotationProcessor extends AbstractProcessor {
         trees = Trees.instance(env);
 
         context = ((JavacProcessingEnvironment) env).getContext();
-        make = TreeMaker.instance(context);
-        names = Names.instance (context);
-        enter = Enter.instance(context);
         memberEnter = MemberEnter.instance(context);
     }
 
