@@ -51,7 +51,7 @@ public class MacroPlugin implements Plugin {
                     final MacroMethodCompiler macroMethodCompiler = new MacroMethodCompiler(context);
                     macroMethodCompiler.compileMacroMethods((JCTree.JCCompilationUnit) e.getCompilationUnit());
 
-//                    System.out.println("macro methods: " + mmc.macroMethods);
+//                    System.out.println("com.ajjpj.macro methods: " + mmc.macroMethods);
                 }
 
 //                Dumper.dump(e.getCompilationUnit());

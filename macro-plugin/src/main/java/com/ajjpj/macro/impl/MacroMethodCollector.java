@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * This class scans a tree for methods annotated as macro methods, collecting a list of them
+ * This class scans a tree for methods annotated as com.ajjpj.macro methods, collecting a list of them
  *
  * @author arno
  */

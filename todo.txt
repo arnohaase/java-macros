@@ -1,3 +1,8 @@
+todo
+----
+* merge 'plugin' and 'annot-proc'
+* generate synthetic method for macros (is this necessary?)
+* test them
 
 
 notes
@@ -64,3 +69,7 @@ notes
   * javac: -XD is the 'back door' to the compiler's options --> -XDx=y
     * javac -verbose
     * javac -XDverboseCompilePolicy=true
+
+  * maven build for annotation processor
+    * META-INF/services/...Processor should be included in JAR but must not be present during compilation (bootstrapping problem)
+    * add <proc>none</proc> to the compiler plugin configuration

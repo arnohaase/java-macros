@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>sample-macros</groupId>
-    <artifactId>sample-macros</artifactId>
+    <groupId>com.ajjpj.java-macro</groupId>
+    <artifactId>java-macro-test</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -16,14 +16,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.ajjpj.java-com.ajjpj.macro</groupId>
-            <artifactId>com.ajjpj.macro-plugin</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ajjpj.java-com.ajjpj.macro</groupId>
-            <artifactId>com.ajjpj.macro-annot-proc</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>com.ajjpj.java-macro</groupId>
+            <artifactId>java-macro</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -43,9 +38,9 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <!--<compilerArgs>-->
-                        <!--<arg>-Xplugin:MacroPlugin</arg>-->
-                    <!--</compilerArgs>-->
+                    <annotationProcessors>
+                        <annotationProcessor>com.ajjpj.macro.impl.MacroAnnotationProcessor</annotationProcessor>
+                    </annotationProcessors>
                 </configuration>
                 <executions>
                     <execution>
