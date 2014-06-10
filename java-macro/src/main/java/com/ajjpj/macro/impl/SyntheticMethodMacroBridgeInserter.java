@@ -2,6 +2,7 @@ package com.ajjpj.macro.impl;
 
 import com.ajjpj.macro.MethodMacro;
 import com.ajjpj.macro.impl.util.MethodBuilder;
+import com.ajjpj.macro.impl.util.TreeDumper;
 import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.code.Type;
 import com.sun.tools.javac.tree.JCTree;
@@ -57,6 +58,8 @@ class SyntheticMethodMacroBridgeInserter extends TreeTranslator {
     private void createSyntheticBridge (JCTree.JCMethodDecl macroMethod) {
         final Type returnType = macroMethod.restype.type.getTypeArguments().head; // TODO make this more robust; error handling
 
+        new TreeDumper().scan(macroMethod);
+
         final JCTree.JCStatement stmt = make.Throw(
                 make.NewClass(
                         null,
@@ -72,6 +75,7 @@ class SyntheticMethodMacroBridgeInserter extends TreeTranslator {
 
         final MethodBuilder methodBuilder = new MethodBuilder (context, macroMethod.name, returnType, impl);
         methodBuilder.setFlags(Flags.PUBLIC | Flags.STATIC);
+        methodBuilder.addAnnotation (MethodMacroBridge.class);
 
         for(JCTree.JCVariableDecl origParam: macroMethod.getParameters().tail) {
             //TODO error handling; make this more robust

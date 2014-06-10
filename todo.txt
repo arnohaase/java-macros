@@ -41,6 +41,7 @@ notes
   * method macros
     * log.debug(...) --> if(log.isDebug()) ...
     * strings with ${...}
+    * SmartAssert
   * class macros
     * @ImmutableStruct
 
@@ -83,3 +84,8 @@ notes
     * add <proc>none</proc> to the compiler plugin configuration
 
   * inserting methods: flag 'SYNTHETIC' apparently hides a method from being called explicitly from code
+
+  * type names in Java code are represented by 'expression' trees
+    * JCIdent for simple names
+    * JCFieldAccess for prefixed packages
+

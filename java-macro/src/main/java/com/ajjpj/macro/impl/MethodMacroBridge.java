@@ -1,14 +1,15 @@
-package com.ajjpj.macro;
+package com.ajjpj.macro.impl;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+
 /**
  * @author arno
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MethodMacro {
+public @interface MethodMacroBridge {
 }

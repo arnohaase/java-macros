@@ -19,9 +19,10 @@ public class MethodBuilder {
     private final Names names;
     private final Enter enter;
     private final MemberEnter memberEnter;
+    private final TypeHelper typeHelper;
 
     private long flags = Flags.PUBLIC;
-    private List<JCTree.JCAnnotation> annotations = List.nil();
+    private ListBuffer<JCTree.JCAnnotation> annotations = new ListBuffer<>();
 
     private final Name name;
     private final JCTree.JCExpression returnType;
@@ -35,6 +36,8 @@ public class MethodBuilder {
         this.enter = Enter.instance (context);
         this.memberEnter = MemberEnter.instance (context);
 
+        this.typeHelper = new TypeHelper(context);
+
         this.name = name;
         this.returnType = make.Type (returnType);
         this.body = body;
@@ -42,6 +45,14 @@ public class MethodBuilder {
 
     public void setFlags(long flags) {
         this.flags = flags;
+    }
+
+    public void addAnnotation (Class<?> annotationClass) {
+        addAnnotation (annotationClass.getName());
+    }
+
+    public void addAnnotation(String fqn) {
+        annotations.add (make.Annotation(typeHelper.makeTypeTree(fqn), List.nil()));
     }
 
     public void addParam(String paramName, Type type) {
@@ -57,7 +68,7 @@ public class MethodBuilder {
 
     public JCTree.JCMethodDecl build() {
         final JCTree.JCMethodDecl synthetic = make.
-                MethodDef(make.Modifiers(flags, annotations),
+                MethodDef(make.Modifiers(flags, annotations.toList()),
                         name,
                         returnType,
                         List.nil(), // type params
