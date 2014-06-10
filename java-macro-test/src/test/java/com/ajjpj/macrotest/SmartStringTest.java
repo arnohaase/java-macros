@@ -6,21 +6,17 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import static com.ajjpj.macrotest.SmartString.s;
+
 /**
  * @author arno
  */
 public class SmartStringTest {
     @Test
     public void testSimple() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        for (Method m: SmartString.class.getMethods()) {
-            for(Annotation a: m.getAnnotations()) {
-                System.out.print(a + " ");
-            }
-            System.out.println(m);
-        }
-
         try {
-            SmartString.s ("abc");
+            System.out.println ((String) SmartString.s ("abc"));
+            System.out.println ((String) com.ajjpj.macrotest.SmartString.s ("xyz"));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,4 +1,4 @@
-package com.ajjpj.macro.impl;
+package com.ajjpj.macro.impl.methodmacro;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

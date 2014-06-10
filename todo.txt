@@ -9,6 +9,8 @@ todo
 
 * remove explicit annotation processor from maven build
 
+* find out how 'null' literal is represented in the AST
+
 done
 ----
 * generate synthetic method for macros (is this necessary?)
@@ -88,4 +90,6 @@ notes
   * type names in Java code are represented by 'expression' trees
     * JCIdent for simple names
     * JCFieldAccess for prefixed packages
+
+  * creating a null literal:         make.Literal(TypeTag.BOT, null);
 

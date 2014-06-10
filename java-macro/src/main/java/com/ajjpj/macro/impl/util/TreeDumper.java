@@ -34,4 +34,10 @@ public class TreeDumper extends TreeScanner {
         System.out.println("name: " + tree.name);
         super.visitSelect(tree);
     }
+
+    @Override
+    public void visitLiteral(JCTree.JCLiteral tree) {
+        printIndent();
+        System.out.println(tree.value + " [" + tree.type + "] " + tree.typetag);
+    }
 }

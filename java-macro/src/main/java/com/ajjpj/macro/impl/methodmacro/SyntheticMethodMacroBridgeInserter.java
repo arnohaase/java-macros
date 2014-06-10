@@ -1,8 +1,9 @@
-package com.ajjpj.macro.impl;
+package com.ajjpj.macro.impl.methodmacro;
 
 import com.ajjpj.macro.MethodMacro;
 import com.ajjpj.macro.impl.util.MethodBuilder;
 import com.ajjpj.macro.impl.util.TreeDumper;
+import com.ajjpj.macro.impl.util.TypeHelper;
 import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.code.Type;
 import com.sun.tools.javac.tree.JCTree;
@@ -16,25 +17,28 @@ import com.sun.tools.javac.util.Names;
 /**
  * @author arno
  */
-class SyntheticMethodMacroBridgeInserter extends TreeTranslator {
+public class SyntheticMethodMacroBridgeInserter extends TreeTranslator {
     private final Context context;
     private final TreeMaker make;
     private final Names names;
-    private final JCTree.JCClassDecl classDecl;
+    private final TypeHelper typeHelper;
 
+    private JCTree.JCClassDecl classDecl;
     private List<JCTree.JCMethodDecl> macroMethods = List.nil();
 
-    SyntheticMethodMacroBridgeInserter (Context context, JCTree.JCClassDecl classDecl) {
+    public SyntheticMethodMacroBridgeInserter (Context context) {
         this.context = context;
-        this.classDecl = classDecl;
         make = TreeMaker.instance (context);
         names = Names.instance (context);
+        typeHelper = new TypeHelper (context);
     }
 
     @Override public void visitClassDef(JCTree.JCClassDecl tree) {
         final List<JCTree.JCMethodDecl> prevList = macroMethods;
+        final JCTree.JCClassDecl prevClass = classDecl;
 
         try {
+            classDecl = tree;
             macroMethods = List.nil();
             super.visitClassDef(tree);
 
@@ -43,6 +47,7 @@ class SyntheticMethodMacroBridgeInserter extends TreeTranslator {
             }
         }
         finally {
+            classDecl = prevClass;
             macroMethods = prevList;
         }
     }
@@ -88,7 +93,7 @@ class SyntheticMethodMacroBridgeInserter extends TreeTranslator {
 
 
     boolean isMethodMacro(JCTree.JCMethodDecl mtd) {
-        if (! hasMacroMethodAnnotation (mtd)) {
+        if (! typeHelper.hasAnnotation (mtd, "com.ajjpj.macro.MethodMacro")) {
             return false;
         }
 
@@ -96,25 +101,4 @@ class SyntheticMethodMacroBridgeInserter extends TreeTranslator {
 
         return true;
     }
-
-    private boolean hasMacroMethodAnnotation(JCTree.JCMethodDecl tree) {
-        final JCTree.JCModifiers modifiers = tree.getModifiers();
-        if(modifiers == null) {
-            return false;
-        }
-
-        for(JCTree.JCAnnotation annotation: modifiers.getAnnotations()) {
-            final JCTree tpe = annotation.annotationType;
-            if(tpe instanceof JCTree.JCIdent) {
-                final JCTree.JCIdent ident = (JCTree.JCIdent) tpe;
-                final String annotName = ident.sym.toString();
-
-                if(MethodMacro.class.getName().equals(annotName)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
 }

@@ -96,5 +96,4 @@ public class MethodBuilder {
             throw new RuntimeException(e);
         }
     }
-
 }
