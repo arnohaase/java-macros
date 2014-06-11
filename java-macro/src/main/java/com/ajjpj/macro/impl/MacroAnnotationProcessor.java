@@ -1,7 +1,7 @@
 package com.ajjpj.macro.impl;
 
 import com.ajjpj.macro.impl.methodmacro.MacroMethodInvoker;
-import com.ajjpj.macro.impl.methodmacro.SyntheticMethodMacroBridgeInserter;
+import com.ajjpj.macro.impl.methodmacro.SyntheticMethodMacroPlaceholderInserter;
 import com.sun.source.util.Trees;
 import com.sun.tools.javac.comp.Env;
 import com.sun.tools.javac.comp.MemberEnter;
@@ -14,8 +14,6 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
-import javax.tools.JavaFileManager;
-import javax.tools.StandardLocation;
 import java.lang.reflect.Method;
 import java.util.Set;
 
@@ -41,9 +39,9 @@ public class MacroAnnotationProcessor extends AbstractProcessor {
         context = ((JavacProcessingEnvironment) env).getContext();
         memberEnter = MemberEnter.instance(context);
 
-        JavaFileManager jfm = context.get(JavaFileManager.class);
-        System.out.println("has annotation processor path: " + jfm.hasLocation(StandardLocation.ANNOTATION_PROCESSOR_PATH));
-        final ClassLoader cl = jfm.getClassLoader(StandardLocation.CLASS_PATH);
+//        JavaFileManager jfm = context.get(JavaFileManager.class);
+//        System.out.println("has annotation processor path: " + jfm.hasLocation(StandardLocation.ANNOTATION_PROCESSOR_PATH));
+//        final ClassLoader cl = jfm.getClassLoader(StandardLocation.CLASS_PATH);
 
 //        try {
 //            System.out.println(" --> " + cl.loadClass("com.ajjpj.macrotest.SmartString").getName());
@@ -52,13 +50,12 @@ public class MacroAnnotationProcessor extends AbstractProcessor {
 ////            e.printStackTrace();
 //        }
 
-        System.out.println("----------------------");
-        dumpCl("getClass()", getClass().getClassLoader());
-        dumpCl("procEnv", macroClassLoader);
-        dumpCl("class path", cl);
-
-        System.out.println("======================================================");
-
+//        System.out.println("----------------------");
+//        dumpCl("getClass()", getClass().getClassLoader());
+//        dumpCl("procEnv", macroClassLoader);
+//        dumpCl("class path", cl);
+//
+//        System.out.println("======================================================");
     }
 
     private void dumpCl(String name, ClassLoader cl) {
@@ -92,17 +89,8 @@ public class MacroAnnotationProcessor extends AbstractProcessor {
 
             final JCTree.JCClassDecl tree = (JCTree.JCClassDecl) trees.getTree(rootEl);
 
-            tree.accept (new SyntheticMethodMacroBridgeInserter (context));
+            tree.accept (new SyntheticMethodMacroPlaceholderInserter(context));
             tree.accept (new MacroMethodInvoker (macroClassLoader, context));
-
-//            try {
-//                final Class cls = macroClassLoader.loadClass("com.ajjpj.macro.impl.MacroAnnotationProcessor");
-//                System.out.println(cls.getName());
-//
-//                System.out.println (macroClassLoader.loadClass("com.ajjpj.macrotest.SmartString").getName()); //TODO ******************
-//            } catch (ClassNotFoundException e) {
-//                e.printStackTrace();
-//            }
         }
 
         return false;

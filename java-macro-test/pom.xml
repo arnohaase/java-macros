@@ -43,9 +43,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <annotationProcessors>
-                        <annotationProcessor>com.ajjpj.macro.impl.MacroAnnotationProcessor</annotationProcessor>
-                    </annotationProcessors>
                 </configuration>
                 <executions>
                     <execution>

@@ -1,16 +1,19 @@
 package com.ajjpj.macro.impl.methodmacro;
 
-import com.ajjpj.macro.impl.util.TreeDumper;
+import com.ajjpj.macro.MethodMacro;
+import com.ajjpj.macro.impl.CompilerContextImpl;
+import com.ajjpj.macro.impl.tree.ExpressionTreeImpl;
 import com.ajjpj.macro.impl.util.TypeHelper;
+import com.ajjpj.macro.tree.ExpressionTree;
 import com.sun.tools.javac.code.Scope;
 import com.sun.tools.javac.code.Symbol;
-import com.sun.tools.javac.code.TypeTag;
-import com.sun.tools.javac.comp.*;
+import com.sun.tools.javac.comp.AttrContext;
+import com.sun.tools.javac.comp.Enter;
+import com.sun.tools.javac.comp.Env;
 import com.sun.tools.javac.tree.JCTree;
-import com.sun.tools.javac.tree.TreeMaker;
 import com.sun.tools.javac.tree.TreeTranslator;
 import com.sun.tools.javac.util.Context;
-import com.sun.tools.javac.util.Names;
+import com.sun.tools.javac.util.List;
 
 import java.lang.reflect.Method;
 
@@ -20,18 +23,18 @@ import java.lang.reflect.Method;
 public class MacroMethodInvoker extends TreeTranslator {
     private final ClassLoader cl;
 
+    private final Context context;
     private final Enter enter;
     private final TypeHelper typeHelper;
-    private final TreeMaker make;
 
     private Env<AttrContext> env;
     private Scope scope;
 
     public MacroMethodInvoker (ClassLoader cl, Context context) {
         this.cl = cl;
+        this.context = context;
         enter = Enter.instance (context);
         typeHelper = new TypeHelper (context);
-        make = TreeMaker.instance (context);
     }
 
     @Override
@@ -54,50 +57,41 @@ public class MacroMethodInvoker extends TreeTranslator {
 
     @Override
     public void visitApply (JCTree.JCMethodInvocation tree) {
-        System.out.println("===============================================");
-        System.out.println("???" + tree);
-        new TreeDumper().scan(tree);
-
         final Method target = typeHelper.resolveInvocationOfExternalStaticMethod (env.toplevel, tree, cl);
-        if (target == null || target.getAnnotation (MethodMacroBridge.class) == null) {
+        if (target == null || target.getAnnotation (MethodMacroPlaceholder.class) == null) {
             super.visitApply(tree);
         }
         else {
-            result = make.Literal (TypeTag.BOT, null);
+            final Method methodMacro = findCorrespondingMacroMethod (target);
+            final Object[] args = new Object[methodMacro.getParameterCount()];
+
+            args[0] = new CompilerContextImpl (cl, context);
+
+            int idx = 1;
+            List<JCTree.JCExpression> argList = tree.getArguments();
+            while(argList.nonEmpty()) {
+                args[idx] = new ExpressionTreeImpl (argList.head);
+                argList = argList.tail;
+            }
+
+            try {
+                final ExpressionTree transformed = (ExpressionTree) methodMacro.invoke (null, args);
+                result = (JCTree) transformed.getInternalRepresentation(); //make.Literal (TypeTag.BOT, null); //TODO
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e); // TODO error handling
+            }
         }
     }
 
-    private String methodNameFqn (JCTree.JCExpression methodSelect) {
-        if (methodSelect instanceof JCTree.JCIdent) {
-            return ((JCTree.JCIdent) methodSelect).getName().toString();
+    private Method findCorrespondingMacroMethod (Method placeholder) {
+        for (Method candidate: placeholder.getDeclaringClass().getMethods()) {
+            if (candidate.getName().equals(placeholder.getName()) &&
+                    candidate.getAnnotation (MethodMacro.class) != null &&
+                    candidate.getParameterCount() == placeholder.getParameterCount() + 1) { //TODO more refined checks
+                return candidate;
+            }
         }
-        if (methodSelect instanceof JCTree.JCFieldAccess) {
-            final JCTree.JCFieldAccess fieldAccess = (JCTree.JCFieldAccess) methodSelect;
-            return methodNameFqn (fieldAccess.getExpression()) + "." + fieldAccess.name;
-        }
-        return null;
+        throw new RuntimeException ("no macro method for placeholder " + placeholder); //TODO error handling
     }
-
-    private Scope.Entry lookup2 (Scope scope, JCTree.JCExpression methodSelect) {
-        if (methodSelect instanceof JCTree.JCIdent) {
-            return scope.lookup(((JCTree.JCIdent) methodSelect).name);
-        }
-
-        final JCTree.JCFieldAccess fieldAccess = (JCTree.JCFieldAccess) methodSelect;
-        final Scope.Entry subEntry = lookup2(scope, fieldAccess.getExpression());
-
-        System.out.println("----> " + methodSelect);
-
-        if(subEntry == null || subEntry.scope == null) {
-            return null;
-        }
-
-        System.out.println("subEntry: " + subEntry);
-        System.out.println("subEntry.scope: " + subEntry.scope);
-
-
-        return subEntry.scope.lookup(fieldAccess.name);
-    }
-
-
 }

@@ -1,6 +1,5 @@
 package com.ajjpj.macro.impl.methodmacro;
 
-import com.ajjpj.macro.MethodMacro;
 import com.ajjpj.macro.impl.util.MethodBuilder;
 import com.ajjpj.macro.impl.util.TreeDumper;
 import com.ajjpj.macro.impl.util.TypeHelper;
@@ -17,7 +16,7 @@ import com.sun.tools.javac.util.Names;
 /**
  * @author arno
  */
-public class SyntheticMethodMacroBridgeInserter extends TreeTranslator {
+public class SyntheticMethodMacroPlaceholderInserter extends TreeTranslator {
     private final Context context;
     private final TreeMaker make;
     private final Names names;
@@ -26,7 +25,7 @@ public class SyntheticMethodMacroBridgeInserter extends TreeTranslator {
     private JCTree.JCClassDecl classDecl;
     private List<JCTree.JCMethodDecl> macroMethods = List.nil();
 
-    public SyntheticMethodMacroBridgeInserter (Context context) {
+    public SyntheticMethodMacroPlaceholderInserter(Context context) {
         this.context = context;
         make = TreeMaker.instance (context);
         names = Names.instance (context);
@@ -80,7 +79,7 @@ public class SyntheticMethodMacroBridgeInserter extends TreeTranslator {
 
         final MethodBuilder methodBuilder = new MethodBuilder (context, macroMethod.name, returnType, impl);
         methodBuilder.setFlags(Flags.PUBLIC | Flags.STATIC);
-        methodBuilder.addAnnotation (MethodMacroBridge.class);
+        methodBuilder.addAnnotation (MethodMacroPlaceholder.class);
 
         for(JCTree.JCVariableDecl origParam: macroMethod.getParameters().tail) {
             //TODO error handling; make this more robust

@@ -1,7 +1,10 @@
 todo
 ----
-* actually implement a method macro
-* implement application fo that method macro
+* SmartString
+  * restrict to string *literal* as a parameter
+  * (create and) use expression parsing abstraction
+  * error handling, warn / error / info messages
+  * source position handling
 
 * special tests
   * test several macro methods in one class
@@ -9,16 +12,21 @@ todo
 
 * remove explicit annotation processor from maven build
 
-* find out how 'null' literal is represented in the AST
+* samples / poc
+  * method macros
+    * log.debug(...) --> if(log.isDebug()) ...
+    * SmartAssert
+    * log method invocation with all parameter names (!) and values
+  * class macros
+    * @ImmutableStruct
 
-done
-----
-* generate synthetic method for macros (is this necessary?)
+* get macros to work with Eclipse compiler
+* IDE integration
 
 notes
 -----
 * macro methods:
-  * implementation: first parameter 'MacroContext', other parameters 'JCExpression'
+  * implementation: first parameter 'CompilerContext', other parameters wrapped 'JCExpression'
   * return type 'JCExpression'
 
   * how to get the compiler to process files in the 'right' order?! Does that happen automatically based on dependencies (if there are no cycles)?
@@ -38,14 +46,6 @@ notes
     * TreeMaker
 
   * TreeMaker
-
-* samples / poc
-  * method macros
-    * log.debug(...) --> if(log.isDebug()) ...
-    * strings with ${...}
-    * SmartAssert
-  * class macros
-    * @ImmutableStruct
 
 * documentation
   * Name: efficient string storage
@@ -93,3 +93,5 @@ notes
 
   * creating a null literal:         make.Literal(TypeTag.BOT, null);
 
+* samples
+  * SmartString

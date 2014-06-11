@@ -2,11 +2,9 @@ package com.ajjpj.macrotest;
 
 import org.junit.Test;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.util.Date;
 
-import static com.ajjpj.macrotest.SmartString.s;
 
 /**
  * @author arno
@@ -14,11 +12,9 @@ import static com.ajjpj.macrotest.SmartString.s;
 public class SmartStringTest {
     @Test
     public void testSimple() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        try {
-            System.out.println ((String) SmartString.s ("abc"));
-            System.out.println ((String) com.ajjpj.macrotest.SmartString.s ("xyz"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        final String now = new Date().toString();
+
+        System.out.println ((String) SmartString.s ("The current time is ${now}!"));
+        System.out.println ((String) com.ajjpj.macrotest.SmartString.s ("... or as a time stamp: ${System.currentTimeMillis()}."));
     }
 }
