@@ -14,7 +14,7 @@ public class SmartStringTest {
     public void testSimple() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         final String now = new Date().toString();
 
-        System.out.println ((String) SmartString.s ("The current time is ${now}!"));
-        System.out.println ((String) com.ajjpj.macrotest.SmartString.s ("... or as a time stamp: ${System.currentTimeMillis()}."));
+        System.out.println (SmartString.s ("The current time is ${now}!!!"));
+        System.out.println (com.ajjpj.macrotest.SmartString.s ("... or as a time stamp: ${System.currentTimeMillis()}."));
     }
 }

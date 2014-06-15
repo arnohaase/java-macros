@@ -1,7 +1,6 @@
 package com.ajjpj.macro.impl.util;
 
 import com.sun.tools.javac.code.Symbol;
-import com.sun.tools.javac.code.TypeTag;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.TreeMaker;
 import com.sun.tools.javac.util.Context;
@@ -43,6 +42,16 @@ public class TypeHelper {
         return result;
     }
 
+    public String getAnnotationFqn (JCTree.JCAnnotation annotationTree) {
+        final JCTree tpe = annotationTree.annotationType;
+
+        if (tpe instanceof JCTree.JCIdent) {
+            final JCTree.JCIdent ident = (JCTree.JCIdent) tpe;
+            return ident.sym.toString();
+        }
+        throw new IllegalArgumentException("TODO: annotations with FQN in code"); //TODO annotations with fqn
+    }
+
     public boolean hasAnnotation (JCTree.JCMethodDecl tree, String annotationFqn) {
         final JCTree.JCModifiers modifiers = tree.getModifiers();
         if(modifiers == null) {
@@ -50,14 +59,10 @@ public class TypeHelper {
         }
 
         for(JCTree.JCAnnotation annot: modifiers.getAnnotations()) {
-            final JCTree tpe = annot.annotationType;
-            if(tpe instanceof JCTree.JCIdent) {
-                final JCTree.JCIdent ident = (JCTree.JCIdent) tpe;
-                final String annotName = ident.sym.toString();
+            final String annotName = getAnnotationFqn (annot);
 
-                if(annotationFqn.equals(annotName)) {
-                    return true;
-                }
+            if(annotationFqn.equals(annotName)) {
+                return true;
             }
         }
         return false;

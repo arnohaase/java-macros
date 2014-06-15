@@ -6,22 +6,33 @@ todo
   * error handling, warn / error / info messages
   * source position handling
 
+* @Struct
+  * getters, setters
+  * equals, hashCode
+  * properties in toString
+
 * special tests
+  * annotations as FQN (instead of imported)
   * test several macro methods in one class
   * test macro method in nested class
 
-* remove explicit annotation processor from maven build
+* source position
 
 * samples / poc
   * method macros
     * log.debug(...) --> if(log.isDebug()) ...
     * SmartAssert
     * log method invocation with all parameter names (!) and values
-  * class macros
-    * @ImmutableStruct
 
+* provide some mechanism to aggregate / delegate class macro invocations
+  * mix and match - @PropertyBasedToString, @GettersAndSetters, @GettersOnly, @ImmutableProperties, @EqualsAndHashCode with @ImmutableStruct and @MutableStruct on top
+  * @SimpleEntity on top
+  * possibility to 'wrap' library macros, allowing laster customization / extension
+* provide an API to create *new* classes
+* change from 'new MyWhatever (context)' to 'MyWhatever.instance (context)'
 * get macros to work with Eclipse compiler
-* IDE integration
+
+* anonymous local classes --> NPE
 
 notes
 -----
@@ -48,6 +59,8 @@ notes
   * TreeMaker
 
 * documentation
+  * predefined, well-known types: Symtab.stringType() etc.
+
   * Name: efficient string storage
   * Symbol
     * Type Hierarchy
