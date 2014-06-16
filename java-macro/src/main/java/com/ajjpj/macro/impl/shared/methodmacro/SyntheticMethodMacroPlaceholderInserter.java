@@ -62,7 +62,7 @@ public class SyntheticMethodMacroPlaceholderInserter extends TreeTranslator {
     private void createSyntheticBridge (JCTree.JCMethodDecl macroMethod) {
         final Type returnType = macroMethod.restype.type.getTypeArguments().head; // TODO make this more robust; error handling
 
-        new TreeDumper().scan(macroMethod);
+//        new TreeDumper().scan(macroMethod);
 
         final JCTree.JCStatement stmt = make.Throw(
                 make.NewClass(

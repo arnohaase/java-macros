@@ -55,7 +55,7 @@ public class MacroAnnotationProcessor extends AbstractProcessor {
             tree.accept (new ClassMacroInvoker (macroClassLoader, context, annotationCache));
 
             tree.accept (new SyntheticMethodMacroPlaceholderInserter(context));
-//            tree.accept (new MacroMethodInvoker(macroClassLoader, context));
+            tree.accept (new MacroMethodInvoker(macroClassLoader, context));
         }
 
         return false;

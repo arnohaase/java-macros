@@ -1,5 +1,6 @@
 package com.ajjpj.macro.impl.util;
 
+import com.sun.swing.internal.plaf.synth.resources.synth;
 import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.code.Type;
 import com.sun.tools.javac.comp.Enter;
@@ -88,6 +89,14 @@ public class MethodBuilder {
 
     private void memberEnter(JCTree.JCMethodDecl synthetic, Env classEnv) {
         try {
+            //TODO extract helper that recursively sets the pos of a JCTree
+            //TODO set the pos to the pos of the macro method that caused this method to be synthethised --> pass the pos in
+            synthetic.setPos(classEnv.tree.getPreferredPosition());
+
+            for(JCTree.JCVariableDecl v: synthetic.getParameters()) {
+                v.pos = synthetic.pos;
+            }
+
             final Method reflectMethodForMemberEnter = memberEnter.getClass().getDeclaredMethod ("memberEnter", JCTree.class, Env.class);
             reflectMethodForMemberEnter.setAccessible (true);
             reflectMethodForMemberEnter.invoke(memberEnter, synthetic, classEnv);
