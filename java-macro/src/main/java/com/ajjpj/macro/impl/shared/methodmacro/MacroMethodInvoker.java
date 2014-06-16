@@ -1,10 +1,10 @@
-package com.ajjpj.macro.impl.methodmacro;
+package com.ajjpj.macro.impl.shared.methodmacro;
 
 import com.ajjpj.macro.MethodMacro;
 import com.ajjpj.macro.impl.CompilerContextImpl;
 import com.ajjpj.macro.impl.tree.ExpressionTreeImpl;
 import com.ajjpj.macro.impl.util.TypeHelper;
-import com.ajjpj.macro.tree.ExpressionTree;
+import com.ajjpj.macro.tree.MExpressionTree;
 import com.sun.tools.javac.code.Scope;
 import com.sun.tools.javac.code.Symbol;
 import com.sun.tools.javac.comp.AttrContext;
@@ -75,7 +75,7 @@ public class MacroMethodInvoker extends TreeTranslator {
             }
 
             try {
-                final ExpressionTree transformed = (ExpressionTree) methodMacro.invoke (null, args);
+                final MExpressionTree transformed = (MExpressionTree) methodMacro.invoke (null, args);
                 result = (JCTree) transformed.getInternalRepresentation(); //make.Literal (TypeTag.BOT, null); //TODO
             } catch (Exception e) {
                 e.printStackTrace();

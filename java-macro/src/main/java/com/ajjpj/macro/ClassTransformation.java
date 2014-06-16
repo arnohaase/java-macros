@@ -1,11 +1,11 @@
 package com.ajjpj.macro;
 
-import com.ajjpj.macro.tree.ClassTree;
+import com.ajjpj.macro.tree.MClassTree;
 
 
 /**
  * @author arno
  */
 public interface ClassTransformation {
-    void transform (CompilerContext context, ClassTree raw);
+    void transform (CompilerContext context, MClassTree raw);
 }

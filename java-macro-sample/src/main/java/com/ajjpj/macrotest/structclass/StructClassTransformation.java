@@ -3,7 +3,7 @@ package com.ajjpj.macrotest.structclass;
 import com.ajjpj.macro.ClassTransformation;
 import com.ajjpj.macro.CompilerContext;
 import com.ajjpj.macro.impl.util.MethodBuilder;
-import com.ajjpj.macro.tree.ClassTree;
+import com.ajjpj.macro.tree.MClassTree;
 import com.sun.tools.javac.code.Symtab;
 import com.sun.tools.javac.parser.ParserFactory;
 import com.sun.tools.javac.tree.JCTree;
@@ -21,7 +21,7 @@ import java.lang.reflect.Constructor;
  */
 public class StructClassTransformation implements ClassTransformation {
     @Override
-    public void transform (CompilerContext context, ClassTree raw) {
+    public void transform (CompilerContext context, MClassTree raw) {
         addToStringMethod(context.getContext(), (JCTree.JCClassDecl) raw.getInternalRepresentation());
     }
 
@@ -39,43 +39,5 @@ public class StructClassTransformation implements ClassTransformation {
         final MethodBuilder methodBuilder = new MethodBuilder(context, names.fromString("toString"), syms.stringType, body);
 
         methodBuilder.buildIntoClass (cls);
-
-    }
-
-    public static void main(String[] args) throws IllegalAccessException, InstantiationException {
-
-        for(Constructor c: Struct.class.getConstructors()) {
-            System.out.println(c);
-        }
-
-        System.err.println("--");
-
-
-        System.out.println (new X().prim());
-//        final Hash h = new Hash() {
-//            @Override
-//            public int prim() {
-//                return 17;
-//            }
-//
-//            @Override
-//            public Class<? extends Annotation> annotationType() {
-//                return Hash.class;
-//            }
-//        };
-//
-//        System.out.println(h);
-    }
-}
-
-class X implements Hash {
-    @Override
-    public int prim() {
-        return 17;
-    }
-
-    @Override
-    public Class<? extends Annotation> annotationType() {
-        return Hash.class;
     }
 }

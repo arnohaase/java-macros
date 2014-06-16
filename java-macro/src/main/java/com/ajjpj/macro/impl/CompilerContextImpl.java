@@ -1,6 +1,7 @@
 package com.ajjpj.macro.impl;
 
 import com.ajjpj.macro.CompilerContext;
+import com.ajjpj.macro.tree.MExpressionTree;
 import com.sun.tools.javac.util.Context;
 
 /**
@@ -18,15 +19,39 @@ public class CompilerContextImpl implements CompilerContext {
         this.context = context;
     }
 
-    public ClassLoader getClassLoader() {
-        return classLoader;
-    }
-
-    public Context getContext() {
+    @Override public Context getContext() {
         return context;
     }
 
-    @Override public void log(String msg) {
-        System.out.println("LOG: " + msg);
+    @Override
+    public void msg(String msg) {
+
     }
+
+    @Override
+    public void warn(String msg) {
+
+    }
+
+    @Override
+    public void error(String msg) {
+
+    }
+
+    @Override
+    public MExpressionTree parseExpression(String expr) {
+        return null;
+    }
+
+    //    public ClassLoader getClassLoader() {
+//        return classLoader;
+//    }
+//
+//    public Context getContext() {
+//        return context;
+//    }
+//
+//    @Override public void log(String msg) {
+//        System.out.println("LOG: " + msg);
+//    }
 }

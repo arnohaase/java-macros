@@ -1,11 +1,10 @@
 package com.ajjpj.macro.impl;
 
-import com.ajjpj.macro.impl.classmacro.AnnotationCache;
-import com.ajjpj.macro.impl.classmacro.ClassMacroInvoker;
-import com.ajjpj.macro.impl.methodmacro.MacroMethodInvoker;
-import com.ajjpj.macro.impl.methodmacro.SyntheticMethodMacroPlaceholderInserter;
+import com.ajjpj.macro.impl.shared.classmacro.AnnotationCache;
+import com.ajjpj.macro.impl.shared.classmacro.ClassMacroInvoker;
+import com.ajjpj.macro.impl.shared.methodmacro.MacroMethodInvoker;
+import com.ajjpj.macro.impl.shared.methodmacro.SyntheticMethodMacroPlaceholderInserter;
 import com.sun.source.util.Trees;
-import com.sun.tools.javac.comp.MemberEnter;
 import com.sun.tools.javac.processing.JavacProcessingEnvironment;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.util.Context;
@@ -25,7 +24,6 @@ import java.util.Set;
 public class MacroAnnotationProcessor extends AbstractProcessor {
     private Trees trees;
     private Context context;
-    private MemberEnter memberEnter;
 
     private ClassLoader macroClassLoader;
     private AnnotationCache annotationCache;
@@ -39,7 +37,6 @@ public class MacroAnnotationProcessor extends AbstractProcessor {
         trees = Trees.instance(env);
 
         context = ((JavacProcessingEnvironment) env).getContext();
-        memberEnter = MemberEnter.instance(context);
     }
 
 
@@ -58,7 +55,7 @@ public class MacroAnnotationProcessor extends AbstractProcessor {
             tree.accept (new ClassMacroInvoker (macroClassLoader, context, annotationCache));
 
             tree.accept (new SyntheticMethodMacroPlaceholderInserter(context));
-            tree.accept (new MacroMethodInvoker (macroClassLoader, context));
+//            tree.accept (new MacroMethodInvoker(macroClassLoader, context));
         }
 
         return false;

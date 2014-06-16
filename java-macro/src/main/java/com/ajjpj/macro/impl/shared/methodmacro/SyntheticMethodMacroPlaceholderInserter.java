@@ -1,4 +1,4 @@
-package com.ajjpj.macro.impl.methodmacro;
+package com.ajjpj.macro.impl.shared.methodmacro;
 
 import com.ajjpj.macro.impl.util.MethodBuilder;
 import com.ajjpj.macro.impl.util.TreeDumper;
@@ -69,7 +69,7 @@ public class SyntheticMethodMacroPlaceholderInserter extends TreeTranslator {
                         null,
                         null,
                         make.Ident (names.fromString (UnsupportedOperationException.class.getSimpleName())),
-                        List.nil(),
+                        List.<JCTree.JCExpression> nil(),
                         null));
 
         final JCTree.JCBlock impl =

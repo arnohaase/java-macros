@@ -1,4 +1,4 @@
-package com.ajjpj.macro.impl.classmacro;
+package com.ajjpj.macro.impl.shared.classmacro;
 
 import com.ajjpj.macro.ClassMacro;
 import com.ajjpj.macro.ClassTransformationFactory;

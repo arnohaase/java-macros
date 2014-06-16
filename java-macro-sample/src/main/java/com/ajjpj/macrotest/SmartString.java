@@ -3,8 +3,7 @@ package com.ajjpj.macrotest;
 import com.ajjpj.macro.CompilerContext;
 import com.ajjpj.macro.MethodMacro;
 import com.ajjpj.macro.impl.tree.ExpressionTreeImpl;
-import com.ajjpj.macro.tree.ExpressionTree;
-import com.sun.tools.javac.parser.JavacParser;
+import com.ajjpj.macro.tree.MExpressionTree;
 import com.sun.tools.javac.parser.ParserFactory;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.TreeMaker;
@@ -14,7 +13,7 @@ import com.sun.tools.javac.tree.TreeMaker;
  * @author arno
  */
 public class SmartString {
-    @MethodMacro public static ExpressionTree<String> s (CompilerContext ctx, ExpressionTree<String> string) {
+    @MethodMacro public static MExpressionTree<String> s (CompilerContext ctx, MExpressionTree<String> string) {
 
         //TODO error reporting if the expression that was passed in is not a literal
         String remainder = (String) ((JCTree.JCLiteral) string.getInternalRepresentation()).getValue(); //TODO make this more robust; error reporting

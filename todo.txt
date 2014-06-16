@@ -34,6 +34,19 @@ todo
 
 * anonymous local classes --> NPE
 
+* annotation macro
+  * transformation: interface with methods for type, method, variable, ...
+    * abstract implementation that delegates them all to a single method with throws UnsupportedOperationException (or equivalent error message)
+  * parameter: Class*WithHierarchy*, Method*WithHierarchy* etc. --> wrapper around (wrapped) AST node
+  * ifaces that wrap AST nodes: MClass, MMethod, MExpression, MLiteral, ...
+    * MClass has   List<MMethod> getMethods();
+      * provides a view, lazy wrapping
+      * 'add' does the MemberEnter magic
+      * 'remove' also cleans up internals
+
+  * 'SequenceExpression' (comma operator from C) --> evaluate all, return the last
+
+
 notes
 -----
 * macro methods:

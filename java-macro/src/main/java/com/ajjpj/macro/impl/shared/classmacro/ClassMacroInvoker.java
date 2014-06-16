@@ -1,10 +1,10 @@
-package com.ajjpj.macro.impl.classmacro;
+package com.ajjpj.macro.impl.shared.classmacro;
 
 import com.ajjpj.macro.ClassTransformationFactory;
 import com.ajjpj.macro.impl.CompilerContextImpl;
 import com.ajjpj.macro.impl.tree.ClassTreeImpl;
 import com.ajjpj.macro.impl.util.TypeHelper;
-import com.ajjpj.macro.tree.ClassTree;
+import com.ajjpj.macro.tree.MClassTree;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.TreeTranslator;
 import com.sun.tools.javac.util.Context;
@@ -30,7 +30,7 @@ public class ClassMacroInvoker extends TreeTranslator {
     public void visitClassDef(JCTree.JCClassDecl jcClassDecl) {
         final JCTree.JCModifiers mods = jcClassDecl.getModifiers();
         if (mods != null) {
-            final ClassTree tree = new ClassTreeImpl (jcClassDecl);
+            final MClassTree tree = new ClassTreeImpl (jcClassDecl);
 
             for(JCTree.JCAnnotation annot: mods.getAnnotations()) {
                 final ClassTransformationFactory factory = annotationCache.getFactory(typeHelper.getAnnotationFqn(annot));
