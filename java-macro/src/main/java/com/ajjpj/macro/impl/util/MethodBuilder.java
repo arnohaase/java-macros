@@ -80,8 +80,10 @@ public class MethodBuilder {
         return synthetic;
     }
 
-    public void buildIntoClass (JCTree.JCClassDecl cls) {
+    public void buildIntoClass (JCTree.JCClassDecl cls, int sourcePos) {
         final JCTree.JCMethodDecl mtd = build();
+        new SourcePosSetter (sourcePos).scan (mtd);
+
         cls.defs = cls.defs.prepend (mtd);
         memberEnter (mtd, enter.getEnv (cls.sym)); //TODO optimization: set flag in 'enter'?
 
@@ -89,14 +91,6 @@ public class MethodBuilder {
 
     private void memberEnter(JCTree.JCMethodDecl synthetic, Env classEnv) {
         try {
-            //TODO extract helper that recursively sets the pos of a JCTree
-            //TODO set the pos to the pos of the macro method that caused this method to be synthethised --> pass the pos in
-            synthetic.setPos(classEnv.tree.getPreferredPosition());
-
-            for(JCTree.JCVariableDecl v: synthetic.getParameters()) {
-                v.pos = synthetic.pos;
-            }
-
             final Method reflectMethodForMemberEnter = memberEnter.getClass().getDeclaredMethod ("memberEnter", JCTree.class, Env.class);
             reflectMethodForMemberEnter.setAccessible (true);
             reflectMethodForMemberEnter.invoke(memberEnter, synthetic, classEnv);

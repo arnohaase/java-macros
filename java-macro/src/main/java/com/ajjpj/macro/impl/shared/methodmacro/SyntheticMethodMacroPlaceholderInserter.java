@@ -86,7 +86,7 @@ public class SyntheticMethodMacroPlaceholderInserter extends TreeTranslator {
             methodBuilder.addParam (origParam.name, origParam.getType().type.getTypeArguments().head);
         }
 
-        methodBuilder.buildIntoClass(classDecl);
+        methodBuilder.buildIntoClass (classDecl, macroMethod.pos);
     }
 
 

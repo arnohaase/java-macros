@@ -38,6 +38,6 @@ public class StructClassTransformation implements ClassTransformation {
 
         final MethodBuilder methodBuilder = new MethodBuilder(context, names.fromString("toString"), syms.stringType, body);
 
-        methodBuilder.buildIntoClass (cls);
+        methodBuilder.buildIntoClass (cls, cls.pos);
     }
 }
