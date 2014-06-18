@@ -9,11 +9,11 @@ import com.sun.tools.javac.tree.JCTree;
 public class MJavacLiteralExpression implements MLiteralTree {
     private final JCTree.JCLiteral inner;
 
-    public MJavacLiteralExpression(JCTree.JCLiteral inner) {
+    public MJavacLiteralExpression (JCTree.JCLiteral inner) {
         this.inner = inner;
     }
 
-    @Override public Object getValue() {
+    @Override public Object getValue() { //TODO special handling for boolean and character
         return inner.getValue();
     }
 

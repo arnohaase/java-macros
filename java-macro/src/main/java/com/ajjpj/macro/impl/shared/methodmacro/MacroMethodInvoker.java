@@ -1,7 +1,8 @@
 package com.ajjpj.macro.impl.shared.methodmacro;
 
 import com.ajjpj.macro.MethodMacro;
-import com.ajjpj.macro.impl.CompilerContextImpl;
+import com.ajjpj.macro.impl.javac.JavacCompilerContext;
+import com.ajjpj.macro.impl.javac.tree.WrapperFactory;
 import com.ajjpj.macro.impl.tree.ExpressionTreeImpl;
 import com.ajjpj.macro.impl.util.TypeHelper;
 import com.ajjpj.macro.tree.MExpressionTree;
@@ -65,12 +66,12 @@ public class MacroMethodInvoker extends TreeTranslator {
             final Method methodMacro = findCorrespondingMacroMethod (target);
             final Object[] args = new Object[methodMacro.getParameterCount()];
 
-            args[0] = new CompilerContextImpl (cl, context);
+            args[0] = new JavacCompilerContext (context);
 
             int idx = 1;
             List<JCTree.JCExpression> argList = tree.getArguments();
             while(argList.nonEmpty()) {
-                args[idx] = new ExpressionTreeImpl (argList.head);
+                args[idx] = WrapperFactory.wrap (argList.head);
                 argList = argList.tail;
             }
 

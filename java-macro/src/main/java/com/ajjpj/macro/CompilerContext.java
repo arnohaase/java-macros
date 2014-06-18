@@ -2,6 +2,7 @@ package com.ajjpj.macro;
 
 import com.ajjpj.macro.tree.MClassTree;
 import com.ajjpj.macro.tree.MExpressionTree;
+import com.ajjpj.macro.util.MTreeMaker;
 import com.sun.tools.javac.util.Context;
 
 /**
@@ -14,7 +15,9 @@ public interface CompilerContext {
     void warn (String msg); //TODO code position
     void error (String msg); //TODO code position
 
-    MExpressionTree parseExpression (String expr);
+    MTreeMaker treeMaker();
+
+//    MExpressionTree parseExpression (String expr);
 
 //        void addClass (MClassTree classTree);
 }

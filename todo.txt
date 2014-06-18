@@ -34,6 +34,9 @@ todo
 
 * anonymous local classes --> NPE
 
+* MethodBuilder: separte 'abstract method', 'concrete method', 'annotation method'
+* separate Javac / EJC implementation in MacroAnnotationProcessor
+
 * annotation macro
   * transformation: interface with methods for type, method, variable, ...
     * abstract implementation that delegates them all to a single method with throws UnsupportedOperationException (or equivalent error message)
