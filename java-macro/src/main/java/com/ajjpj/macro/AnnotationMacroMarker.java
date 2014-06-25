@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.ANNOTATION_TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ClassMacro {
-    Class<? extends ClassTransformationFactory> value();
+public @interface AnnotationMacroMarker {
+    Class<? extends AnnotationMacro> value();
 }

@@ -1,12 +1,8 @@
 package com.ajjpj.macro.impl.javac;
 
 import com.ajjpj.macro.CompilerContext;
-import com.ajjpj.macro.impl.javac.tree.MJavacExpression;
-import com.ajjpj.macro.impl.javac.tree.MJavacLiteralExpression;
-import com.ajjpj.macro.tree.MExpressionTree;
 import com.ajjpj.macro.util.MTreeMaker;
-import com.sun.tools.javac.parser.ParserFactory;
-import com.sun.tools.javac.tree.JCTree;
+import com.ajjpj.macro.util.MTypes;
 import com.sun.tools.javac.util.Context;
 
 /**
@@ -38,6 +34,10 @@ public class JavacCompilerContext implements CompilerContext {
     @Override
     public void error(String msg) {
 
+    }
+
+    @Override public MTypes types() {
+        return null;
     }
 
     @Override public MTreeMaker treeMaker() {

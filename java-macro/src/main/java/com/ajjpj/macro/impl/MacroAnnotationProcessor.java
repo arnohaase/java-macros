@@ -1,7 +1,7 @@
 package com.ajjpj.macro.impl;
 
 import com.ajjpj.macro.impl.shared.classmacro.AnnotationCache;
-import com.ajjpj.macro.impl.shared.classmacro.ClassMacroInvoker;
+import com.ajjpj.macro.impl.shared.classmacro.AnnotationMacroInvoker;
 import com.ajjpj.macro.impl.shared.methodmacro.MacroMethodInvoker;
 import com.ajjpj.macro.impl.shared.methodmacro.SyntheticMethodMacroPlaceholderInserter;
 import com.sun.source.util.Trees;
@@ -52,7 +52,7 @@ public class MacroAnnotationProcessor extends AbstractProcessor {
 
             final JCTree.JCClassDecl tree = (JCTree.JCClassDecl) trees.getTree(rootEl);
 
-            tree.accept (new ClassMacroInvoker (macroClassLoader, context, annotationCache));
+            tree.accept (new AnnotationMacroInvoker(macroClassLoader, context, annotationCache));
 
             tree.accept (new SyntheticMethodMacroPlaceholderInserter(context));
             tree.accept (new MacroMethodInvoker(macroClassLoader, context));

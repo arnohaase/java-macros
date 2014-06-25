@@ -1,6 +1,6 @@
 package com.ajjpj.macro.impl.shared.classmacro;
 
-import com.ajjpj.macro.ClassTransformationFactory;
+import com.ajjpj.macro.AnnotationMacro;
 import com.ajjpj.macro.impl.javac.JavacCompilerContext;
 import com.ajjpj.macro.impl.tree.ClassTreeImpl;
 import com.ajjpj.macro.impl.util.TypeHelper;
@@ -12,14 +12,14 @@ import com.sun.tools.javac.util.Context;
 /**
  * @author arno
  */
-public class ClassMacroInvoker extends TreeTranslator {
+public class AnnotationMacroInvoker extends TreeTranslator {
     private final ClassLoader cl;
     private final Context context;
 
     private final AnnotationCache annotationCache;
     private final TypeHelper typeHelper;
 
-    public ClassMacroInvoker (ClassLoader cl, Context context, AnnotationCache annotationCache) {
+    public AnnotationMacroInvoker(ClassLoader cl, Context context, AnnotationCache annotationCache) {
         this.cl = cl;
         this.context = context;
         this.annotationCache = annotationCache;
@@ -33,10 +33,10 @@ public class ClassMacroInvoker extends TreeTranslator {
             final MClassTree tree = new ClassTreeImpl (jcClassDecl);
 
             for(JCTree.JCAnnotation annot: mods.getAnnotations()) {
-                final ClassTransformationFactory factory = annotationCache.getFactory(typeHelper.getAnnotationFqn(annot));
+                final AnnotationMacro macro = annotationCache.getMacro(typeHelper.getAnnotationFqn(annot));
 
-                if (factory != null) {
-                    factory.create (null).transform (new JavacCompilerContext (context), tree); //TODO allow replacing the class decl? How to do that with annotation processor API?
+                if (macro != null) {
+                    macro.transform (new JavacCompilerContext(context), tree); //TODO allow replacing the class decl? How to do that with annotation processor API?
                 }
             }
         }

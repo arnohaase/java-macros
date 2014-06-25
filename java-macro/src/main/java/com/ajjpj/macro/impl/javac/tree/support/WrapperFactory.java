@@ -1,14 +1,23 @@
-package com.ajjpj.macro.impl.javac.tree;
+package com.ajjpj.macro.impl.javac.tree.support;
 
+import com.ajjpj.macro.impl.javac.tree.MJavacExpression;
+import com.ajjpj.macro.impl.javac.tree.MJavacStatement;
+import com.ajjpj.macro.impl.javac.tree.expr.MJavacLiteralExpression;
+import com.ajjpj.macro.impl.javac.tree.stmt.MJavacBlockStatement;
 import com.ajjpj.macro.tree.MExpressionTree;
 import com.ajjpj.macro.tree.MStatementTree;
 import com.sun.tools.javac.tree.JCTree;
+import com.sun.tools.javac.util.List;
 
 /**
  * @author arno
  */
 public class WrapperFactory {
     public static MExpressionTree wrap (JCTree.JCExpression inner) {
+        if(inner == null) {
+            return null;
+        }
+
         switch (inner.getKind()) {
             case BOOLEAN_LITERAL:
             case CHAR_LITERAL:
@@ -26,6 +35,15 @@ public class WrapperFactory {
     }
 
     public static MStatementTree wrap (JCTree.JCStatement inner) {
+        if(inner == null) {
+            return null;
+        }
+
+        switch (inner.getKind()) {
+            case BLOCK: return new MJavacBlockStatement((JCTree.JCBlock) inner);
+            case VARIABLE: //TODO
+        }
+
         return new MJavacStatement(inner); //TODO refine for different kinds of statements
     }
 }

@@ -23,6 +23,7 @@ todo
     * log.debug(...) --> if(log.isDebug()) ...
     * SmartAssert
     * log method invocation with all parameter names (!) and values
+  * @NullShortcut for a path expression: shortcut evaluation
 
 * provide some mechanism to aggregate / delegate class macro invocations
   * mix and match - @PropertyBasedToString, @GettersAndSetters, @GettersOnly, @ImmutableProperties, @EqualsAndHashCode with @ImmutableStruct and @MutableStruct on top

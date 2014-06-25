@@ -1,6 +1,7 @@
-package com.ajjpj.macro.impl.javac.tree;
+package com.ajjpj.macro.impl.javac.tree.expr;
 
 
+import com.ajjpj.macro.impl.javac.tree.support.WrapperFactory;
 import com.ajjpj.macro.tree.MExpressionTree;
 import com.ajjpj.macro.tree.expr.BinaryOperator;
 import com.ajjpj.macro.tree.expr.MBinaryExpressionTree;
@@ -21,7 +22,7 @@ public class MJavacBinaryExpression implements MBinaryExpressionTree {
     }
 
     @Override public MExpressionTree getLeft() {
-        return WrapperFactory.wrap (inner.getLeftOperand());
+        return WrapperFactory.wrap(inner.getLeftOperand());
     }
 
     @Override public MExpressionTree getRight() {

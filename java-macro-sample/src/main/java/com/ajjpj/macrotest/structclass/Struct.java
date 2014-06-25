@@ -1,6 +1,6 @@
 package com.ajjpj.macrotest.structclass;
 
-import com.ajjpj.macro.ClassMacro;
+import com.ajjpj.macro.AnnotationMacroMarker;
 
 import java.lang.annotation.*;
 
@@ -9,6 +9,6 @@ import java.lang.annotation.*;
  */
 @Target (ElementType.TYPE)
 @Retention (RetentionPolicy.RUNTIME)
-@ClassMacro (StructClassTransformationFactory.class)
+@AnnotationMacroMarker (StructMacroImpl.class)
 public @interface Struct {
 }

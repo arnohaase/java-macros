@@ -1,4 +1,4 @@
-package com.ajjpj.macro.impl.javac.tree;
+package com.ajjpj.macro.impl.javac.tree.expr;
 
 import com.ajjpj.macro.tree.expr.MLiteralTree;
 import com.sun.tools.javac.tree.JCTree;
