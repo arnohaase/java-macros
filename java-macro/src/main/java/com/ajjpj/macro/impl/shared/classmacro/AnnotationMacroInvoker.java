@@ -15,15 +15,17 @@ import com.sun.tools.javac.util.Context;
 public class AnnotationMacroInvoker extends TreeTranslator {
     private final ClassLoader cl;
     private final Context context;
+    private final JCTree.JCCompilationUnit compilationUnit;
 
     private final AnnotationCache annotationCache;
     private final TypeHelper typeHelper;
 
-    public AnnotationMacroInvoker(ClassLoader cl, Context context, AnnotationCache annotationCache) {
+    public AnnotationMacroInvoker(ClassLoader cl, Context context, AnnotationCache annotationCache, JCTree.JCCompilationUnit compilationUnit) {
         this.cl = cl;
         this.context = context;
         this.annotationCache = annotationCache;
         this.typeHelper = new TypeHelper (context);
+        this.compilationUnit = compilationUnit;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class AnnotationMacroInvoker extends TreeTranslator {
                 final AnnotationMacro macro = annotationCache.getMacro(typeHelper.getAnnotationFqn(annot));
 
                 if (macro != null) {
-                    macro.transform (new JavacCompilerContext(context), tree); //TODO allow replacing the class decl? How to do that with annotation processor API?
+                    macro.transform (new JavacCompilerContext (context, compilationUnit), tree); //TODO allow replacing the class decl? How to do that with annotation processor API?
                 }
             }
         }

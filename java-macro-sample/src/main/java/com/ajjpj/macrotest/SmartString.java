@@ -14,6 +14,10 @@ import com.ajjpj.macro.util.MTreeMaker;
 public class SmartString {
     @MethodMacro public static MExpressionTree<String> s (CompilerContext ctx, MExpressionTree<String> string) {
 
+        ctx.msg (string, "asdf");
+        ctx.warn (string, "bcd");
+//        ctx.error (string, "cadsf");
+
         //TODO error reporting if the expression that was passed in is not a literal
 
         String remainder = ((MLiteralTree<String>) string).getValue();

@@ -1,6 +1,5 @@
 todo
 ----
-* error / warning / info logging
 * ecj support
 * anonymous local classes --> NPE
 

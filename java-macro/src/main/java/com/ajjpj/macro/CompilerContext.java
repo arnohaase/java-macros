@@ -2,6 +2,7 @@ package com.ajjpj.macro;
 
 import com.ajjpj.macro.tree.MClassTree;
 import com.ajjpj.macro.tree.MExpressionTree;
+import com.ajjpj.macro.tree.MTree;
 import com.ajjpj.macro.util.MTreeMaker;
 import com.ajjpj.macro.util.MTypes;
 import com.sun.tools.javac.util.Context;
@@ -10,14 +11,10 @@ import com.sun.tools.javac.util.Context;
  * @author arno
  */
 public interface CompilerContext {
-    Context getContext(); //TODO remove this
-
-    void msg (String msg); //TODO code position
-    void warn (String msg); //TODO code position
-    void error (String msg); //TODO code position
+    void msg (MTree codePos, String msg);
+    void warn (MTree codePos, String msg);
+    void error (MTree codePos, String msg);
 
     MTypes types();
     MTreeMaker treeMaker();
-
-//        void addClass (MClassTree classTree);
 }

@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
  */
 public class MacroMethodInvoker extends TreeTranslator {
     private final ClassLoader cl;
+    private final JCTree.JCCompilationUnit compilationUnit;
 
     private final Context context;
     private final Enter enter;
@@ -30,11 +31,12 @@ public class MacroMethodInvoker extends TreeTranslator {
     private Env<AttrContext> env;
     private Scope scope;
 
-    public MacroMethodInvoker (ClassLoader cl, Context context) {
+    public MacroMethodInvoker (ClassLoader cl, Context context, JCTree.JCCompilationUnit compilationUnit) {
         this.cl = cl;
         this.context = context;
         enter = Enter.instance (context);
         typeHelper = new TypeHelper (context);
+        this.compilationUnit = compilationUnit;
     }
 
     @Override
@@ -65,7 +67,7 @@ public class MacroMethodInvoker extends TreeTranslator {
             final Method methodMacro = findCorrespondingMacroMethod (target);
             final Object[] args = new Object[methodMacro.getParameterCount()];
 
-            args[0] = new JavacCompilerContext (context);
+            args[0] = new JavacCompilerContext (context, compilationUnit);
 
             int idx = 1;
             List<JCTree.JCExpression> argList = tree.getArguments();
