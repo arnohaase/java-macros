@@ -50,6 +50,7 @@ todo
 
   * 'SequenceExpression' (comma operator from C) --> evaluate all, return the last
 
+* support for modifying existing AST nodes, e.g. method or attribute visibility
 
 notes
 -----

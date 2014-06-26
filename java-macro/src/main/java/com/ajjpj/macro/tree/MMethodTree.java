@@ -4,7 +4,8 @@ import com.ajjpj.macro.tree.stmt.MBlockTree;
 import com.ajjpj.macro.tree.stmt.MVariableDeclTree;
 import com.ajjpj.macro.tree.support.MModifiers;
 import com.ajjpj.macro.tree.support.MType;
-import com.sun.tools.javac.util.List;
+
+import java.util.List;
 
 /**
  * @author arno

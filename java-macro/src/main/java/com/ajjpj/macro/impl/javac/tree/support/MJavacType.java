@@ -12,7 +12,7 @@ public class MJavacType implements MType {
         this.type = type;
     }
 
-    @Override public Object getInternalRepresentation() {
+    @Override public Type getInternalRepresentation() {
         return type;
     }
 }

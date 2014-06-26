@@ -1,7 +1,7 @@
 package com.ajjpj.macro.tree.support;
 
 
-interface MModifiers {
+public interface MModifiers {
     MVisibility getVisibility();
 
     boolean isStatic();

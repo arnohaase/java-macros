@@ -20,15 +20,10 @@ public interface MTreeMaker {
     MExpressionTree parseExpression (String expr);
     MStatementTree parseStatement (String stmt);
 
-    /**
-     * @param mask based on java.lang.reflect.Modifier bit masks
-     */
-    MModifiers Modifiers (int mask);
-
     MMethodTree ConcreteMethod (String name, MType returnType, MModifiers modifiers, List<MVariableDeclTree> parameters, MBlockTree body);
 
     MBinaryExpressionTree BinaryExpression (MExpressionTree left, MExpressionTree right, BinaryOperator op);
     MLiteralTree Literal (Object value);
 
-    MStatementTree Block(MStatementTree... statements);
+    MBlockTree Block(MStatementTree... statements);
 }

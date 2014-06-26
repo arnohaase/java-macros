@@ -21,7 +21,7 @@ public class MJavacBlockStatement implements MBlockTree {
         return new WrappedStatementList (inner.getStatements()); //TODO deal with changes / additions
     }
 
-    @Override public Object getInternalRepresentation() {
+    @Override public JCTree.JCBlock getInternalRepresentation() {
         return inner;
     }
 }

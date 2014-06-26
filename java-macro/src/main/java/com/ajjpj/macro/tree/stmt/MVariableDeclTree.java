@@ -9,4 +9,6 @@ import com.ajjpj.macro.tree.support.MType;
 public interface MVariableDeclTree extends MStatementTree {
     String getName();
     MType getType();
+
+    //TODO init clause
 }

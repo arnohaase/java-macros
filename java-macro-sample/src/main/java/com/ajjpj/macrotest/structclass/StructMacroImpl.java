@@ -6,6 +6,7 @@ import com.ajjpj.macro.tree.MClassTree;
 import com.ajjpj.macro.tree.MMethodTree;
 import com.ajjpj.macro.tree.MStatementTree;
 import com.ajjpj.macro.tree.stmt.MBlockTree;
+import com.ajjpj.macro.tree.support.MModifiersBuilderForMethod;
 import com.ajjpj.macro.util.AbstractAnnotationMacro;
 import com.ajjpj.macro.util.MTreeMaker;
 import com.sun.tools.javac.code.Symtab;
@@ -35,8 +36,9 @@ public class StructMacroImpl extends AbstractAnnotationMacro {
         final MStatementTree stmt = make.parseStatement("return getClass().getSimpleName() + \" [\" + super.toString() + ']';");
         final MBlockTree body = make.Block (stmt);
 
-        return make.ConcreteMethod("toString", context.types().stringType(), make.Modifiers (Modifier.PUBLIC), Collections.emptyList(), body);
+        final MModifiersBuilderForMethod modifiers = new MModifiersBuilderForMethod();
 
+        return make.ConcreteMethod("toString", context.types().stringType(), modifiers.build(), Collections.emptyList(), body);
     }
 
     private void addToStringMethod (Context contextRaw, JCTree.JCClassDecl cls) {
