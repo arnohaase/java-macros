@@ -1,8 +1,9 @@
 package com.ajjpj.macro.impl.javac;
 
 import com.ajjpj.macro.CompilerContext;
+import com.ajjpj.macro.impl.javac.tree.support.MJavacTypes;
 import com.ajjpj.macro.util.MTreeMaker;
-import com.ajjpj.macro.util.MTypes;
+import com.sun.tools.javac.code.Symtab;
 import com.sun.tools.javac.util.Context;
 
 /**
@@ -11,10 +12,12 @@ import com.sun.tools.javac.util.Context;
 public class JavacCompilerContext implements CompilerContext {
     private final Context context;
     private final MTreeMaker treeMaker;
+    private final Symtab syms;
 
     public JavacCompilerContext(Context context) {
         this.context = context;
         treeMaker = new JavacTreeMaker (context);
+        syms = Symtab.instance (context);
     }
 
     @Override public Context getContext() {
@@ -36,8 +39,8 @@ public class JavacCompilerContext implements CompilerContext {
 
     }
 
-    @Override public MTypes types() {
-        return null;
+    @Override public MJavacTypes types() {
+        return new MJavacTypes(syms);
     }
 
     @Override public MTreeMaker treeMaker() {

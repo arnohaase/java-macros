@@ -9,4 +9,5 @@ public interface MTypes {
     MType stringType();
 
     //TODO add other built-in types
+    //TODO from fqn
 }

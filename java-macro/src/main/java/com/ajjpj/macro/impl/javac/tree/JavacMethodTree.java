@@ -49,7 +49,7 @@ public class JavacMethodTree implements MMethodTree {
         return new MJavacBlockStatement(inner.getBody());
     }
 
-    @Override public Object getInternalRepresentation() {
+    @Override public JCTree.JCMethodDecl getInternalRepresentation() {
         return inner;
     }
 }

@@ -6,7 +6,8 @@ import com.ajjpj.macro.impl.javac.tree.expr.MJavacLiteralExpression;
 import com.ajjpj.macro.impl.javac.tree.stmt.MJavacBlockStatement;
 import com.ajjpj.macro.impl.javac.tree.support.MJavacType;
 import com.ajjpj.macro.impl.javac.tree.support.WrapperFactory;
-import com.ajjpj.macro.impl.util.MethodBuilder;
+import com.ajjpj.macro.impl.util.SourcePosSetter;
+import com.ajjpj.macro.tree.MClassTree;
 import com.ajjpj.macro.tree.MExpressionTree;
 import com.ajjpj.macro.tree.MMethodTree;
 import com.ajjpj.macro.tree.MStatementTree;
@@ -19,15 +20,17 @@ import com.ajjpj.macro.tree.support.MModifiers;
 import com.ajjpj.macro.tree.support.MType;
 import com.ajjpj.macro.util.MTreeMaker;
 import com.sun.tools.javac.code.Flags;
-import com.sun.tools.javac.code.Type;
 import com.sun.tools.javac.code.TypeTag;
+import com.sun.tools.javac.comp.Enter;
+import com.sun.tools.javac.comp.Env;
+import com.sun.tools.javac.comp.MemberEnter;
 import com.sun.tools.javac.parser.ParserFactory;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.TreeMaker;
 import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.Names;
 
-import java.util.Arrays;
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -37,11 +40,15 @@ class JavacTreeMaker implements MTreeMaker {
     private final TreeMaker make;
     private final ParserFactory parserFactory;
     private final Names names;
+    private final Enter enter;
+    private final MemberEnter memberEnter;
 
     JavacTreeMaker(Context context) {
         make = TreeMaker.instance (context);
         parserFactory = ParserFactory.instance (context);
         names = Names.instance(context);
+        enter = Enter.instance(context);
+        memberEnter = MemberEnter.instance(context);
     }
 
     @Override public MExpressionTree parseExpression (String expr) {
@@ -52,6 +59,32 @@ class JavacTreeMaker implements MTreeMaker {
         return WrapperFactory.wrap (parserFactory.newParser(stmt, false, false, false).parseStatement()); //TODO apply 'partial Enter'
     }
 
+    @Override public void addMethod (MClassTree cls, MMethodTree method) {
+        final JCTree.JCClassDecl jcClassTree = (JCTree.JCClassDecl) cls.getInternalRepresentation();
+
+        final JCTree.JCMethodDecl mtd = ((JavacMethodTree) method).getInternalRepresentation();
+
+        new SourcePosSetter (jcClassTree.pos).scan(mtd);
+
+        jcClassTree.defs = jcClassTree.defs.prepend (mtd);
+        memberEnter (mtd, enter.getEnv (jcClassTree.sym)); //TODO optimization: set flag in 'enter'?
+
+    }
+
+    private void memberEnter(JCTree.JCMethodDecl synthetic, Env classEnv) {
+        try {
+            final Method reflectMethodForMemberEnter = memberEnter.getClass().getDeclaredMethod ("memberEnter", JCTree.class, Env.class);
+            reflectMethodForMemberEnter.setAccessible (true);
+            reflectMethodForMemberEnter.invoke(memberEnter, synthetic, classEnv);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e); //TODO error handling
+        }
+    }
+
+
+
+    //TODO parameters
     //TODO annotations
     @Override public MMethodTree ConcreteMethod(String name, MType returnType, MModifiers modifiers, List<MVariableDeclTree> parameters, MBlockTree body) {
         final MJavacType javacReturnType = (MJavacType) returnType;
@@ -61,9 +94,9 @@ class JavacTreeMaker implements MTreeMaker {
                 MethodDef(make.Modifiers(extractFlags(modifiers), com.sun.tools.javac.util.List.nil() /* TODO annotations */ ),
                         names.fromString(name),
                         make.Type(javacReturnType.getInternalRepresentation()),
-                        com.sun.tools.javac.util.List.nil(), // type params
-                        com.sun.tools.javac.util.List.nil(), //params.toList(),
-                        com.sun.tools.javac.util.List.nil(), // thrown
+                        com.sun.tools.javac.util.List.nil(), // TODO type params
+                        com.sun.tools.javac.util.List.nil(), // TODO params.toList(),
+                        com.sun.tools.javac.util.List.nil(), // TODO thrown
                         javacBody.getInternalRepresentation(),
                         null);
 
@@ -98,7 +131,7 @@ class JavacTreeMaker implements MTreeMaker {
         com.sun.tools.javac.util.List<JCTree.JCStatement> stmts = com.sun.tools.javac.util.List.nil();
 
         for(int i=statements.length - 1; i >= 0; i--) {
-            stmts.prepend((JCTree.JCStatement) statements[i].getInternalRepresentation());
+            stmts = stmts.prepend((JCTree.JCStatement) statements[i].getInternalRepresentation());
         }
 
         return new MJavacBlockStatement (make.Block(0, stmts));

@@ -13,8 +13,7 @@ public class MJavacClassTree implements MClassTree {
         this.inner = inner;
     }
 
-    @Override
-    public Object getInternalRepresentation() {
+    @Override public JCTree.JCClassDecl getInternalRepresentation() {
         return inner;
     }
 }

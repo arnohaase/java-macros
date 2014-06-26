@@ -17,7 +17,6 @@ import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.List;
 import com.sun.tools.javac.util.Names;
 
-import java.lang.reflect.Modifier;
 import java.util.Collections;
 
 
@@ -26,11 +25,11 @@ import java.util.Collections;
  */
 public class StructMacroImpl extends AbstractAnnotationMacro {
 
-    @Override public void transform (CompilerContext context, MClassTree raw) {
-        addToStringMethod(context.getContext(), (JCTree.JCClassDecl) raw.getInternalRepresentation());
+    @Override public void transform (CompilerContext context, MClassTree cls) {
+        addToStringMethod (context, cls);
     }
 
-    private MMethodTree createToStringMethod (CompilerContext context) {
+    private void addToStringMethod (CompilerContext context, MClassTree cls) {
         final MTreeMaker make = context.treeMaker();
 
         final MStatementTree stmt = make.parseStatement("return getClass().getSimpleName() + \" [\" + super.toString() + ']';");
@@ -38,22 +37,8 @@ public class StructMacroImpl extends AbstractAnnotationMacro {
 
         final MModifiersBuilderForMethod modifiers = new MModifiersBuilderForMethod();
 
-        return make.ConcreteMethod("toString", context.types().stringType(), modifiers.build(), Collections.emptyList(), body);
-    }
+        final MMethodTree mtd = make.ConcreteMethod("toString", context.types().stringType(), modifiers.build(), Collections.emptyList(), body);
 
-    private void addToStringMethod (Context contextRaw, JCTree.JCClassDecl cls) {
-        final Names names = Names.instance (contextRaw);
-        final Symtab syms = Symtab.instance (contextRaw);
-
-        final TreeMaker make = TreeMaker.instance (contextRaw);
-        final ParserFactory parserFactory = ParserFactory.instance (contextRaw);
-
-        final JCTree.JCStatement stmt = parserFactory.newParser ("return getClass().getSimpleName() + \" [\" + super.toString() + ']';", false, false, false).parseStatement();
-
-        final JCTree.JCBlock body = make.Block (0, List.of (stmt));
-
-        final MethodBuilder methodBuilder = new MethodBuilder(contextRaw, names.fromString("toString"), syms.stringType, body);
-
-        methodBuilder.buildIntoClass (cls, cls.pos);
+        make.addMethod (cls, mtd);
     }
 }

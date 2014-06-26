@@ -1,5 +1,6 @@
 package com.ajjpj.macro.util;
 
+import com.ajjpj.macro.tree.MClassTree;
 import com.ajjpj.macro.tree.MExpressionTree;
 import com.ajjpj.macro.tree.MMethodTree;
 import com.ajjpj.macro.tree.MStatementTree;
@@ -17,8 +18,16 @@ import java.util.List;
  * @author arno
  */
 public interface MTreeMaker {
+    //--- parsing
+
     MExpressionTree parseExpression (String expr);
     MStatementTree parseStatement (String stmt);
+
+    //--- AST modification
+
+    void addMethod (MClassTree cls, MMethodTree method);
+
+    //--- AST creation
 
     MMethodTree ConcreteMethod (String name, MType returnType, MModifiers modifiers, List<MVariableDeclTree> parameters, MBlockTree body);
 
