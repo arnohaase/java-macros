@@ -8,6 +8,7 @@ import com.ajjpj.macro.tree.support.MType;
 public interface MTypes {
     MType stringType();
 
-    //TODO add other built-in types
-    //TODO from fqn
+    MType fromFqn(String fqn);
+
+    //TODO add built-in types
 }

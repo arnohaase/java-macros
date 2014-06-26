@@ -1,5 +1,9 @@
 todo
 ----
+* error / warning / info logging
+* ecj support
+* anonymous local classes --> NPE
+
 * SmartString
   * restrict to string *literal* as a parameter
   * (create and) use expression parsing abstraction
@@ -31,9 +35,6 @@ todo
   * possibility to 'wrap' library macros, allowing laster customization / extension
 * provide an API to create *new* classes
 * change from 'new MyWhatever (context)' to 'MyWhatever.instance (context)'
-* get macros to work with Eclipse compiler
-
-* anonymous local classes --> NPE
 
 * MethodBuilder: separte 'abstract method', 'concrete method', 'annotation method'
 * separate Javac / EJC implementation in MacroAnnotationProcessor
@@ -50,7 +51,10 @@ todo
 
   * 'SequenceExpression' (comma operator from C) --> evaluate all, return the last
 
+  * convenience: parser for with possibility to access 'context' ASTs - original AST, parameter / variable ASTs that are in scope, ...
+
 * support for modifying existing AST nodes, e.g. method or attribute visibility
+
 
 notes
 -----

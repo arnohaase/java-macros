@@ -40,7 +40,7 @@ public class JavacCompilerContext implements CompilerContext {
     }
 
     @Override public MJavacTypes types() {
-        return new MJavacTypes(syms);
+        return new MJavacTypes (context);
     }
 
     @Override public MTreeMaker treeMaker() {
