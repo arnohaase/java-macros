@@ -64,7 +64,7 @@ public class SyntheticMethodMacroPlaceholderInserter extends TreeTranslator {
 
 //        new TreeDumper().scan(macroMethod);
 
-        final JCTree.JCStatement stmt = make.Throw(
+        final JCTree.JCStatement stmt = make.Throw( //TODO add explaining text along the lines of 'compiled without macro support'
                 make.NewClass(
                         null,
                         null,
