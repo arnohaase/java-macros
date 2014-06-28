@@ -1,9 +1,7 @@
 todo
 ----
 * ecj support
-* anonymous local classes --> NPE
 * generics in method macro signature: <T> expr<T> a (expr<T> in)
-* static imports for method macros
 
 * SmartString
   * restrict to string *literal* as a parameter

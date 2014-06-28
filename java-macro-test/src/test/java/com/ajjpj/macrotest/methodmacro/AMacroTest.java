@@ -14,6 +14,13 @@ public class AMacroTest {
     public void testTransform() {
         assertEquals ("transformed Yo", com.ajjpj.macrotest.methodmacro.AMacro.a("Yo"));
         assertEquals ("transformed Hi", AMacro.a("Hi"));
+
+        new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Moin!");
+            }
+        }.run();
     }
 
     @Test

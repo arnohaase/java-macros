@@ -48,6 +48,11 @@ public class MacroMethodInvoker extends TreeTranslator {
         final Scope prevScope = scope;
 
         Symbol.ClassSymbol sym = tree.sym;
+        if (sym == null) {
+            super.visitClassDef (tree);
+            return;
+        }
+
         scope = sym.members();
 
         try {
