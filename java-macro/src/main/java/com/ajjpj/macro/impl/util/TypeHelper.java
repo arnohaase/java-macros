@@ -1,6 +1,8 @@
 package com.ajjpj.macro.impl.util;
 
+import com.ajjpj.macro.impl.shared.methodmacro.MethodMacroPlaceholder;
 import com.sun.tools.javac.code.Symbol;
+import com.sun.tools.javac.jvm.ClassReader;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.TreeMaker;
 import com.sun.tools.javac.util.Context;
@@ -16,10 +18,12 @@ import java.lang.reflect.Modifier;
 public class TypeHelper {
     private final TreeMaker make;
     private final Names names;
+    private final ClassReader classes;
 
     public TypeHelper(Context context) {
         this.make = TreeMaker.instance (context);
         this.names = Names.instance (context);
+        this.classes = ClassReader.instance (context);
     }
 
     public JCTree makeTypeTree (String typeName) {
@@ -87,6 +91,36 @@ public class TypeHelper {
      * @return the method if it exists, <code>null</code> otherwise
      */
     public Method resolveInvocationOfExternalStaticMethod (JCTree.JCCompilationUnit compilationUnit, JCTree.JCMethodInvocation methodInvocation, ClassLoader cl) {
+
+//        System.out.println("------------------------>>> " + methodInvocation);
+//        try {
+//            System.out.println("    " + classes.loadClass(names.fromString("Abc")));
+//        } catch (Symbol.CompletionFailure completionFailure) {
+//            System.out.println("*****");
+//            completionFailure.printStackTrace(System.out);
+//        }
+
+
+//        for(Symbol s: compilationUnit.namedImportScope.getElements()) {
+//            if(s instanceof Symbol.ClassSymbol) {
+//                System.out.println("  " + s);
+//                final Symbol.ClassSymbol cs = (Symbol.ClassSymbol) s;
+//                System.out.println("        --> " + cs.getSimpleName());
+//
+//                for(Symbol m: s.members().getElements()) {
+//                    System.out.println("    " + m + "  -->  " + m.getClass().getSimpleName());
+//                }
+//            }
+//            else {
+//                final Symbol.MethodSymbol m = (Symbol.MethodSymbol) s;
+//                System.out.println("    ==> " + m);
+//                MethodMacroPlaceholder annot = m.getAnnotation(MethodMacroPlaceholder.class);
+//            }
+//        }
+
+
+
+
         final String qualifiedMethodName = methodNameFqn (methodInvocation.getMethodSelect());
         if (qualifiedMethodName == null) {
             return null;
@@ -123,7 +157,14 @@ public class TypeHelper {
         return null;
     }
 
+//    private Method resolveMethodFromStaticImports (String methodName, int numParams, JCTree.JCCompilationUnit compilationUnit) {
+//        compilationUnit.namedImportScope.getElements().iterator().next().isStatic();
+//    }
+
     private Class<?> resolveClassFromImports (String className, JCTree.JCCompilationUnit compilationUnit, ClassLoader cl) {
+//        final Symbol.ClassSymbol cls = classes.enterClass (names.fromString (className));
+
+
         try {
             return cl.loadClass(className);
         }
