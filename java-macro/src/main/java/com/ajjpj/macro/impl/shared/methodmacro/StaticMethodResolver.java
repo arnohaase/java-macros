@@ -1,12 +1,14 @@
 package com.ajjpj.macro.impl.shared.methodmacro;
 
 import com.ajjpj.macro.MethodMacro;
+import com.sun.tools.javac.code.Scope;
 import com.sun.tools.javac.code.Symbol;
 import com.sun.tools.javac.jvm.ClassReader;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.Name;
 import com.sun.tools.javac.util.Names;
+import com.sun.tools.javac.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,20 +42,28 @@ class StaticMethodResolver {
         }
 
         final int idxLastDot = methodNameFqn.lastIndexOf('.');
+        final Name methodName = names.fromString(methodNameFqn.substring(idxLastDot + 1));
+
         if (idxLastDot == -1) {
-            // simple name --> check static imports
-
-            return null; //TODO
-
             //TODO check if the invoked method is in the current class' scope
+
+            // simple name --> check static imports
+            final Pair<Symbol.MethodSymbol, Boolean> fromNamed = fromStaticImports (methodName, methodInvocation.getArguments().size(), compilationUnit.namedImportScope);
+            if (fromNamed.fst != null) {
+                return fromNamed.fst;
+            }
+            if (fromNamed.snd) {
+                return null;
+            }
+
+            return fromStaticImports (methodName, methodInvocation.getArguments().size(), compilationUnit.starImportScope).fst;
         }
         else {
             //TODO check if the invocation's qualifier is a variable in current scope
 
             // class name present --> check non-static imports
 
-            final String className = methodNameFqn.substring (0, idxLastDot);
-            final Name methodName = names.fromString (methodNameFqn.substring (idxLastDot + 1));
+            final String className = methodNameFqn.substring(0, idxLastDot);
 
             final Symbol.ClassSymbol cls = resolveClass (compilationUnit, className);
             if (cls == null) {
@@ -94,6 +104,38 @@ class StaticMethodResolver {
                 return null;
             }
         }
+    }
+
+    /**
+     * @return pair of macro method, finished
+     */
+    private Pair<Symbol.MethodSymbol, Boolean> fromStaticImports (Name methodName, int numArgs, Scope scope) {
+        final List<Symbol.MethodSymbol> candidates = new ArrayList<>();
+        boolean hasMacroMethod = false;
+
+        for (Symbol s: scope.getElements()) {
+            if (! (s instanceof Symbol.MethodSymbol)) {
+                continue;
+            }
+
+            final Symbol.MethodSymbol mtd = (Symbol.MethodSymbol) s;
+            if (methodName.equals (mtd.name) && numArgs == mtd.getParameters().size()) {
+                candidates.add (mtd);
+                hasMacroMethod = hasMacroMethod || mtd.getAnnotation (MethodMacroPlaceholder.class) != null;
+            }
+        }
+
+        if (candidates.isEmpty()) {
+            return Pair.of (null, false);
+        }
+
+        if (! hasMacroMethod) {
+            return Pair.of (null, true);
+        }
+        if (candidates.size() == 1) {
+            return Pair.of (candidates.get (0), true);
+        }
+        throw new RuntimeException (); //TODO error handling
     }
 
     private Symbol.ClassSymbol resolveClass (JCTree.JCCompilationUnit compilationUnit, String className) {
