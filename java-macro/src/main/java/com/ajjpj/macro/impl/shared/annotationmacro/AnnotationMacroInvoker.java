@@ -44,7 +44,6 @@ public class AnnotationMacroInvoker extends TreeScanner {
                 final AnnotationMacro macro = annotationCache.getMacro (typeHelper.getAnnotationFqn (annot));
 
                 if (macro != null) {
-                    //TODO allow replacing the class decl? How to do that with annotation processor API?
                     final MTree transformedRaw = macro.transformClass (new JavacCompilerContext(context, compilationUnit), tree);
                     if (transformedRaw == null || transformedRaw.getInternalRepresentation() == null) {
                         final JCTree parent = (JCTree) TreePath.getPath(compilationUnit, jcClassDecl).getParentPath().getLeaf(); //TODO is there a more efficient way to do this? jcClassDecl.sym.owner, but how to get the corresponding JCTree?!
@@ -79,6 +78,8 @@ public class AnnotationMacroInvoker extends TreeScanner {
 
         super.visitClassDef (jcClassDecl);
     }
+
+    //TODO annotation macros for methods,
 }
 
 

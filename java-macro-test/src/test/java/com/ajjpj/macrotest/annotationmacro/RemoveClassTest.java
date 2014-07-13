@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 /**
  * @author arno
  */
-public class RemovePartTest {
+public class RemoveClassTest {
     @RemovePart
     public static class RemovedNestedClass {
     }
@@ -15,7 +15,7 @@ public class RemovePartTest {
     @Test
     public void testRemoveNestedClass() {
         try {
-            Class.forName ("com.ajjpj.macrotest.annotationmacro.RemovePartTest$RemovedNestedClass");
+            Class.forName ("com.ajjpj.macrotest.annotationmacro.RemoveClassTest$RemovedNestedClass");
             fail("exception expected");
         }
         catch (ClassNotFoundException exc) { /**/ }
