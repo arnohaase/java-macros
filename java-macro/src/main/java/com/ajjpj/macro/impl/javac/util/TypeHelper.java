@@ -1,16 +1,11 @@
-package com.ajjpj.macro.impl.util;
+package com.ajjpj.macro.impl.javac.util;
 
-import com.ajjpj.macro.impl.shared.methodmacro.MethodMacroPlaceholder;
-import com.sun.tools.javac.code.Symbol;
 import com.sun.tools.javac.jvm.ClassReader;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.TreeMaker;
 import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.Name;
 import com.sun.tools.javac.util.Names;
-
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 
 /**
  * @author arno

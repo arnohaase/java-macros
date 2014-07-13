@@ -1,8 +1,7 @@
 package com.ajjpj.macro.impl.shared.methodmacro;
 
 import com.ajjpj.macro.impl.util.MethodBuilder;
-import com.ajjpj.macro.impl.util.TreeDumper;
-import com.ajjpj.macro.impl.util.TypeHelper;
+import com.ajjpj.macro.impl.javac.util.TypeHelper;
 import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.code.Type;
 import com.sun.tools.javac.tree.JCTree;

@@ -4,14 +4,8 @@ import com.ajjpj.macro.CompilerContext;
 import com.ajjpj.macro.impl.javac.tree.support.MJavacTypes;
 import com.ajjpj.macro.tree.MTree;
 import com.ajjpj.macro.util.MTreeMaker;
-import com.sun.tools.javac.code.Kinds;
-import com.sun.tools.javac.code.Symbol;
-import com.sun.tools.javac.code.Symtab;
-import com.sun.tools.javac.comp.AttrContext;
 import com.sun.tools.javac.comp.Enter;
-import com.sun.tools.javac.comp.Env;
 import com.sun.tools.javac.tree.JCTree;
-import com.sun.tools.javac.util.AbstractLog;
 import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.Log;
 

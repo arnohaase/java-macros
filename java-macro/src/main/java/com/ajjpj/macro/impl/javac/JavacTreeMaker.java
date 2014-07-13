@@ -6,7 +6,7 @@ import com.ajjpj.macro.impl.javac.tree.expr.MJavacLiteralExpression;
 import com.ajjpj.macro.impl.javac.tree.stmt.MJavacBlockStatement;
 import com.ajjpj.macro.impl.javac.tree.support.MJavacType;
 import com.ajjpj.macro.impl.javac.tree.support.WrapperFactory;
-import com.ajjpj.macro.impl.util.SourcePosSetter;
+import com.ajjpj.macro.impl.javac.util.SourcePosSetter;
 import com.ajjpj.macro.tree.MClassTree;
 import com.ajjpj.macro.tree.MExpressionTree;
 import com.ajjpj.macro.tree.MMethodTree;

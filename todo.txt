@@ -59,6 +59,7 @@ todo
 
 * support for modifying existing AST nodes, e.g. method or attribute visibility
 
+* JavaDoc support
 
 notes
 -----

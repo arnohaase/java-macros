@@ -56,7 +56,7 @@ public class MacroAnnotationProcessor extends AbstractProcessor {
             final JCTree.JCClassDecl tree = (JCTree.JCClassDecl) trees.getTree(rootEl);
             final JCTree.JCCompilationUnit compilationUnit = enter.getEnv (tree.sym).toplevel;
 
-            tree.accept (new AnnotationMacroInvoker(macroClassLoader, context, annotationCache, compilationUnit));
+            tree.accept (new AnnotationMacroInvoker(context, annotationCache, compilationUnit));
 
             tree.accept (new SyntheticMethodMacroPlaceholderInserter(context));
             tree.accept (new MacroMethodInvoker(macroClassLoader, context, compilationUnit));

@@ -1,6 +1,7 @@
 package com.ajjpj.macro.impl.util;
 
-import com.sun.swing.internal.plaf.synth.resources.synth;
+import com.ajjpj.macro.impl.javac.util.SourcePosSetter;
+import com.ajjpj.macro.impl.javac.util.TypeHelper;
 import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.code.Type;
 import com.sun.tools.javac.comp.Enter;
@@ -82,7 +83,7 @@ public class MethodBuilder {
 
     public void buildIntoClass (JCTree.JCClassDecl cls, int sourcePos) {
         final JCTree.JCMethodDecl mtd = build();
-        new SourcePosSetter (sourcePos).scan (mtd);
+        new SourcePosSetter(sourcePos).scan (mtd);
 
         cls.defs = cls.defs.prepend (mtd);
         memberEnter (mtd, enter.getEnv (cls.sym)); //TODO optimization: set flag in 'enter'?
