@@ -1,7 +1,7 @@
 package com.ajjpj.macro.impl;
 
-import com.ajjpj.macro.impl.shared.classmacro.AnnotationCache;
-import com.ajjpj.macro.impl.shared.classmacro.AnnotationMacroInvoker;
+import com.ajjpj.macro.impl.shared.annotationmacro.AnnotationCache;
+import com.ajjpj.macro.impl.shared.annotationmacro.AnnotationMacroInvoker;
 import com.ajjpj.macro.impl.shared.methodmacro.MacroMethodInvoker;
 import com.ajjpj.macro.impl.shared.methodmacro.SyntheticMethodMacroPlaceholderInserter;
 import com.sun.source.util.Trees;
@@ -15,7 +15,6 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
-import javax.tools.Diagnostic;
 import java.util.Set;
 
 /**

@@ -26,6 +26,7 @@ public interface MTreeMaker {
     //--- AST modification
 
     void addMethod (MClassTree cls, MMethodTree method);
+//    void removeMethod (MClassTree cls, MMethodTree method);
 
     //--- AST creation
 

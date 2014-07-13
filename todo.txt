@@ -2,6 +2,11 @@ todo
 ----
 * ecj support
 * generics in method macro signature: <T> expr<T> a (expr<T> in)
+* annotation macro: method
+* annotation macro: replace class
+* *remove* a method
+* annotation macro: declarative composition
+* reflection for classes
 
 * SmartString
   * restrict to string *literal* as a parameter
@@ -35,7 +40,7 @@ todo
 * provide an API to create *new* classes
 * change from 'new MyWhatever (context)' to 'MyWhatever.instance (context)'
 
-* MethodBuilder: separte 'abstract method', 'concrete method', 'annotation method'
+* MethodBuilder: separate 'abstract method', 'concrete method', 'annotation method'
 * separate Javac / EJC implementation in MacroAnnotationProcessor
 
 * annotation macro

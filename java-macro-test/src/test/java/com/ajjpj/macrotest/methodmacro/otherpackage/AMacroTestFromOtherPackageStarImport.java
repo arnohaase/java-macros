@@ -1,20 +1,18 @@
-package com.ajjpj.macrotest.methodmacro;
+package com.ajjpj.macrotest.methodmacro.otherpackage;
 
+import com.ajjpj.macrotest.methodmacro.*;
 import org.junit.Test;
 
-import java.util.Arrays;
-
-import static org.junit.Assert.assertEquals;
 import static com.ajjpj.macrotest.methodmacro.AMacro.*;
-
+import static org.junit.Assert.*;
 
 /**
  * @author arno
  */
-public class AMacroTest {
+public class AMacroTestFromOtherPackageStarImport {
     @Test
     public void testTransform() {
-        assertEquals ("transformed Yo", com.ajjpj.macrotest.methodmacro.AMacro.a("Yo"));
+        assertEquals ("transformed Yo", AMacro.a("Yo"));
         assertEquals ("transformed Hi", AMacro.a("Hi"));
     }
 
@@ -32,4 +30,5 @@ public class AMacroTest {
     public void testStaticImport() {
         assertEquals ("transformed Hi", a("Hi"));
     }
+
 }

@@ -17,8 +17,9 @@ import java.util.Collections;
  */
 public class StructMacroImpl extends AbstractAnnotationMacro {
 
-    @Override public void transform (CompilerContext context, MClassTree cls) {
+    @Override public MClassTree transformClass(CompilerContext context, MClassTree cls) {
         addToStringMethod (context, cls);
+        return cls;
     }
 
     private void addToStringMethod (CompilerContext context, MClassTree cls) {

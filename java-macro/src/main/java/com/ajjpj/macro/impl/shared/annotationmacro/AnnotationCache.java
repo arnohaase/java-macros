@@ -1,4 +1,4 @@
-package com.ajjpj.macro.impl.shared.classmacro;
+package com.ajjpj.macro.impl.shared.annotationmacro;
 
 import com.ajjpj.macro.AnnotationMacro;
 import com.ajjpj.macro.AnnotationMacroMarker;

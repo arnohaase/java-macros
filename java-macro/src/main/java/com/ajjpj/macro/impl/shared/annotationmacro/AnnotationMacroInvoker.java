@@ -1,4 +1,4 @@
-package com.ajjpj.macro.impl.shared.classmacro;
+package com.ajjpj.macro.impl.shared.annotationmacro;
 
 import com.ajjpj.macro.AnnotationMacro;
 import com.ajjpj.macro.impl.javac.JavacCompilerContext;
@@ -32,13 +32,15 @@ public class AnnotationMacroInvoker extends TreeTranslator {
     public void visitClassDef(JCTree.JCClassDecl jcClassDecl) {
         final JCTree.JCModifiers mods = jcClassDecl.getModifiers();
         if (mods != null) {
-            final MClassTree tree = new ClassTreeImpl (jcClassDecl);
 
             for(JCTree.JCAnnotation annot: mods.getAnnotations()) {
-                final AnnotationMacro macro = annotationCache.getMacro(typeHelper.getAnnotationFqn(annot));
+                final MClassTree tree = new ClassTreeImpl (jcClassDecl);
+                final AnnotationMacro macro = annotationCache.getMacro (typeHelper.getAnnotationFqn (annot));
 
                 if (macro != null) {
-                    macro.transform (new JavacCompilerContext (context, compilationUnit), tree); //TODO allow replacing the class decl? How to do that with annotation processor API?
+                    //TODO allow replacing the class decl? How to do that with annotation processor API?
+//                    final JCTree.JCClassDecl transformed = (JCTree.JCClassDecl) macro.transformClass (new JavacCompilerContext(context, compilationUnit), tree).getInternalRepresentation();
+//                    if (transformed )
                 }
             }
         }
