@@ -1,11 +1,8 @@
 package com.ajjpj.macro;
 
-import com.ajjpj.macro.tree.MClassTree;
-import com.ajjpj.macro.tree.MExpressionTree;
 import com.ajjpj.macro.tree.MTree;
 import com.ajjpj.macro.util.MTreeMaker;
 import com.ajjpj.macro.util.MTypes;
-import com.sun.tools.javac.util.Context;
 
 /**
  * @author arno
