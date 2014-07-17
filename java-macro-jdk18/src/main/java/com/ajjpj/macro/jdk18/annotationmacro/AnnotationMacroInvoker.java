@@ -1,7 +1,8 @@
-package com.ajjpj.macro.jdk18;
+package com.ajjpj.macro.jdk18.annotationmacro;
 
 import com.ajjpj.macro.AnnotationMacro;
 import com.ajjpj.macro.impl.shared.annotationmacro.AnnotationCache;
+import com.ajjpj.macro.jdk18.JavacCompilerContext;
 import com.ajjpj.macro.jdk18.tree.MJavacClassTree;
 import com.ajjpj.macro.jdk18.util.JcTreeHelper;
 import com.ajjpj.macro.jdk18.util.ListHelper;
@@ -44,7 +45,7 @@ public class AnnotationMacroInvoker extends TreeScanner {
                 final AnnotationMacro macro = annotationCache.getMacro (typeHelper.getAnnotationFqn (annot));
 
                 if (macro != null) {
-                    final MTree transformedRaw = macro.transformClass (new JavacCompilerContext(context, compilationUnit), tree);
+                    final MTree transformedRaw = macro.transformClass (new JavacCompilerContext (context, compilationUnit), tree);
                     if (transformedRaw == null || transformedRaw.getInternalRepresentation() == null) {
                         final JCTree parent = (JCTree) TreePath.getPath(compilationUnit, jcClassDecl).getParentPath().getLeaf(); //TODO is there a more efficient way to do this? jcClassDecl.sym.owner, but how to get the corresponding JCTree?!
 

@@ -8,10 +8,10 @@ import com.sun.tools.javac.tree.JCTree;
 /**
  * @author arno
  */
-public class AbstractJavacModifiersView implements MModifiers {
+public class JavacModifiersView implements MModifiers {
     private final JCTree.JCModifiers inner;
 
-    public AbstractJavacModifiersView(JCTree.JCModifiers inner) {
+    public JavacModifiersView (JCTree.JCModifiers inner) {
         this.inner = inner;
     }
 

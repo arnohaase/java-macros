@@ -2,7 +2,7 @@ package com.ajjpj.macro.jdk18.tree;
 
 import com.ajjpj.macro.jdk18.tree.stmt.MJavacBlockStatement;
 import com.ajjpj.macro.jdk18.tree.stmt.MJavacVariableDeclStatement;
-import com.ajjpj.macro.jdk18.tree.support.AbstractJavacModifiersView;
+import com.ajjpj.macro.jdk18.tree.support.JavacModifiersView;
 import com.ajjpj.macro.jdk18.tree.support.MJavacType;
 import com.ajjpj.macro.tree.MMethodTree;
 import com.ajjpj.macro.tree.stmt.MBlockTree;
@@ -33,7 +33,7 @@ public class JavacMethodTree implements MMethodTree {
     }
 
     @Override public MModifiers getModifiers() {
-        return new AbstractJavacModifiersView(inner.getModifiers());
+        return new JavacModifiersView (inner.getModifiers());
     }
 
     @Override public List<MVariableDeclTree> getParameters() {

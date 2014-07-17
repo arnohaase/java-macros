@@ -1,6 +1,7 @@
 package com.ajjpj.macro.jdk18;
 
 import com.ajjpj.macro.jdk18.tree.JavacMethodTree;
+import com.ajjpj.macro.jdk18.tree.MJavacClassTree;
 import com.ajjpj.macro.jdk18.tree.expr.MJavacBinaryExpression;
 import com.ajjpj.macro.jdk18.tree.expr.MJavacLiteralExpression;
 import com.ajjpj.macro.jdk18.tree.stmt.MJavacBlockStatement;
@@ -83,6 +84,18 @@ class JavacTreeMaker implements MTreeMaker {
     }
 
 
+    @Override public MClassTree Class (String name, MModifiers modifiers) {
+        final JCTree.JCClassDecl inner = make.ClassDef (
+                make.Modifiers (extractFlags (modifiers), com.sun.tools.javac.util.List.nil () /* TODO annotations */ ),
+                names.fromString (name),
+                com.sun.tools.javac.util.List.<JCTree.JCTypeParameter> nil (), /* TODO type parameters */
+                null, /* TODO */
+                com.sun.tools.javac.util.List.<JCTree.JCExpression> nil(), /* TODO */
+                com.sun.tools.javac.util.List.<JCTree> nil() /* TODO */
+                );
+
+        return new MJavacClassTree (inner);
+    }
 
     //TODO parameters
     //TODO annotations

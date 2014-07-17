@@ -1,6 +1,7 @@
 todo
 ----
-* ecj support, Java 7 support
+* ecj support,
+* Java 7 support (?)
 * generics in method macro signature: <T> expr<T> a (expr<T> in)
 * annotation macro: method
 * annotation macro: replace class

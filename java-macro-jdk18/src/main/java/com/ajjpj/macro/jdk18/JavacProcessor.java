@@ -2,6 +2,7 @@ package com.ajjpj.macro.jdk18;
 
 import com.ajjpj.macro.impl.MacroProcessor;
 import com.ajjpj.macro.impl.shared.annotationmacro.AnnotationCache;
+import com.ajjpj.macro.jdk18.annotationmacro.AnnotationMacroInvoker;
 import com.ajjpj.macro.jdk18.methodmacro.MacroMethodInvoker;
 import com.ajjpj.macro.jdk18.methodmacro.SyntheticMethodMacroPlaceholderInserter;
 import com.sun.source.util.Trees;

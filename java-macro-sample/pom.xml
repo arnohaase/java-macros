@@ -20,7 +20,7 @@
             <artifactId>java-macro</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency> <!-- TODO remove this dependency -->
+        <dependency> <!-- TODO make this dependency obsolete -->
             <groupId>com.ajjpj.java-macro</groupId>
             <artifactId>java-macro-jdk18</artifactId>
             <version>${project.version}</version>
