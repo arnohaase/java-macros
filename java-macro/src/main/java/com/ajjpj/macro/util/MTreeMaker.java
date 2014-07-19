@@ -29,6 +29,9 @@ public interface MTreeMaker {
     void addMethod (MClassTree cls, MMethodTree method);
     void removeMethod (MClassTree cls, MMethodTree method);
 
+    //TODO addVariable
+    void removeVariable (MClassTree cls, MVariableDeclTree var);
+
     //--- AST creation
 
     MClassTree Class (String name, MModifiers modifiers);

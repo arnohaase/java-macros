@@ -78,6 +78,13 @@ class JavacTreeMaker implements MTreeMaker {
         jcClassTree.defs = ListHelper.without (jcClassTree.defs, mtd);
     }
 
+    @Override public void removeVariable (MClassTree cls, MVariableDeclTree variable) {
+        final JCTree.JCClassDecl jcClassTree = (JCTree.JCClassDecl) cls.getInternalRepresentation();
+        final JCTree.JCVariableDecl var = (JCTree.JCVariableDecl) variable.getInternalRepresentation();
+
+        jcClassTree.defs = ListHelper.without (jcClassTree.defs, var);
+    }
+
     private void memberEnter(JCTree.JCMethodDecl synthetic, Env classEnv) {
         try {
             final Method reflectMethodForMemberEnter = memberEnter.getClass().getDeclaredMethod ("memberEnter", JCTree.class, Env.class);

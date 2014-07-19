@@ -11,6 +11,7 @@ import static org.junit.Assert.*;
 public class ModifyClassTest {
     @AddMethod class NestedWithAddedMethod {}
     @RemoveMethod class NestedWithRemovedMethod {void removed() {}}
+    @RemoveVariable class NestedWithRemovedVariable {int removed = 42;}
 
     @Test public void testAddMethod () {
         assertEquals (42, new NestedWithAddedMethod().addedMethod ());
@@ -36,10 +37,21 @@ public class ModifyClassTest {
     }
 
     @Test public void testRemoveAttribute () {
-        fail ("TODO");
+        try {
+            NestedWithRemovedVariable.class.getDeclaredField ("removed");
+            fail ("exception expected");
+        }
+        catch (NoSuchFieldException e) { /**/ }
+
+        try {
+            TopLevelWithRemovedVariable.class.getDeclaredField ("removed");
+            fail ("exception expected");
+        }
+        catch (NoSuchFieldException e) { /**/ }
     }
 }
 
 @AddMethod class TopLevelWithAddedMethod {}
 @RemoveMethod class TopLevelWithRemovedMethod {void removed() {}}
+@RemoveVariable class TopLevelWithRemovedVariable {int removed = 42;}
 
