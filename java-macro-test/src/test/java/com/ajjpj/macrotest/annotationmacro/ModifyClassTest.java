@@ -10,14 +10,25 @@ import static org.junit.Assert.*;
  */
 public class ModifyClassTest {
     @AddMethod class NestedWithAddedMethod {}
+    @RemoveMethod class NestedWithRemovedMethod {void removed() {}}
 
     @Test public void testAddMethod () {
         assertEquals (42, new NestedWithAddedMethod().addedMethod ());
-        assertEquals (42, new TopLevelWithAddedMethod().addedMethod ());
+        assertEquals (42, new TopLevelWithAddedMethod ().addedMethod ());
     }
 
     @Test public void testRemoveMethod () {
-        fail ("TODO");
+        try {
+            NestedWithRemovedMethod.class.getDeclaredMethod ("removed");
+            fail ("exception expected");
+        }
+        catch (NoSuchMethodException e) { /**/ }
+
+        try {
+            TopLevelWithRemovedMethod.class.getDeclaredMethod ("removed");
+            fail ("exception expected");
+        }
+        catch (NoSuchMethodException e) { /**/ }
     }
 
     @Test public void testAddAttribute () {
@@ -30,3 +41,5 @@ public class ModifyClassTest {
 }
 
 @AddMethod class TopLevelWithAddedMethod {}
+@RemoveMethod class TopLevelWithRemovedMethod {void removed() {}}
+

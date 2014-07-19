@@ -7,6 +7,7 @@ import com.ajjpj.macro.jdk18.tree.expr.MJavacLiteralExpression;
 import com.ajjpj.macro.jdk18.tree.stmt.MJavacBlockStatement;
 import com.ajjpj.macro.jdk18.tree.support.MJavacType;
 import com.ajjpj.macro.jdk18.tree.support.WrapperFactory;
+import com.ajjpj.macro.jdk18.util.ListHelper;
 import com.ajjpj.macro.jdk18.util.SourcePosSetter;
 import com.ajjpj.macro.tree.MClassTree;
 import com.ajjpj.macro.tree.MExpressionTree;
@@ -62,14 +63,19 @@ class JavacTreeMaker implements MTreeMaker {
 
     @Override public void addMethod (MClassTree cls, MMethodTree method) {
         final JCTree.JCClassDecl jcClassTree = (JCTree.JCClassDecl) cls.getInternalRepresentation();
-
         final JCTree.JCMethodDecl mtd = ((JavacMethodTree) method).getInternalRepresentation();
 
         new SourcePosSetter (jcClassTree.pos).scan(mtd);
 
         jcClassTree.defs = jcClassTree.defs.prepend (mtd);
         memberEnter (mtd, enter.getEnv (jcClassTree.sym)); //TODO optimization: set flag in 'enter'?
+    }
 
+    @Override public void removeMethod (MClassTree cls, MMethodTree method) {
+        final JCTree.JCClassDecl jcClassTree = (JCTree.JCClassDecl) cls.getInternalRepresentation();
+        final JCTree.JCMethodDecl mtd = ((JavacMethodTree) method).getInternalRepresentation();
+
+        jcClassTree.defs = ListHelper.without (jcClassTree.defs, mtd);
     }
 
     private void memberEnter(JCTree.JCMethodDecl synthetic, Env classEnv) {
