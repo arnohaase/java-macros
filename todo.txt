@@ -4,11 +4,12 @@ todo
 * Java 7 support (?)
 * generics in method macro signature: <T> expr<T> a (expr<T> in)
 * annotation macro: method
-* annotation macro: replace class
-* *remove* a method
 * annotation macro: declarative composition
 * reflection for classes
 * make source position available to macros
+* cleaner build target structure
+  * java-macro-runtime
+  * java-macro-compiletime: assembly of java-macro-runtime, java-macro-jdk18, ... (--> for scope 'provided')
 
 * SmartString
   * restrict to string *literal* as a parameter
