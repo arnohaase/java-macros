@@ -8,6 +8,7 @@ import static org.junit.Assert.*;
  * @author arno
  */
 public class RemoveClassTest {
+    @SuppressWarnings ("unused")
     @RemovePart
     public static class RemovedNestedClass {
     }
@@ -31,6 +32,7 @@ public class RemoveClassTest {
     }
 }
 
+@SuppressWarnings ("unused")
 @RemovePart
 class RemovedTopLevelClass {
 }

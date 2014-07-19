@@ -11,10 +11,16 @@ import com.ajjpj.macro.tree.MClassTree;
 import com.ajjpj.macro.tree.MTree;
 import com.sun.source.util.TreePath;
 import com.sun.tools.javac.code.Scope;
+import com.sun.tools.javac.comp.Check;
 import com.sun.tools.javac.comp.Enter;
+import com.sun.tools.javac.comp.Env;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.TreeScanner;
 import com.sun.tools.javac.util.Context;
+
+import java.lang.reflect.Method;
+import java.util.Objects;
+
 
 /**
  * @author arno
@@ -22,6 +28,7 @@ import com.sun.tools.javac.util.Context;
 public class AnnotationMacroInvoker extends TreeScanner {
     private final Context context;
     private final Enter enter;
+    private final Check check;
     private final JCTree.JCCompilationUnit compilationUnit;
 
     private final AnnotationCache annotationCache;
@@ -30,6 +37,7 @@ public class AnnotationMacroInvoker extends TreeScanner {
     public AnnotationMacroInvoker (Context context, AnnotationCache annotationCache, JCTree.JCCompilationUnit compilationUnit) {
         this.context = context;
         this.enter = Enter.instance (context);
+        this.check = Check.instance (context);
         this.annotationCache = annotationCache;
         this.typeHelper = new TypeHelper (context);
         this.compilationUnit = compilationUnit;
@@ -46,38 +54,74 @@ public class AnnotationMacroInvoker extends TreeScanner {
 
                 if (macro != null) {
                     final MTree transformedRaw = macro.transformClass (new JavacCompilerContext (context, compilationUnit), tree);
-                    if (transformedRaw == null || transformedRaw.getInternalRepresentation() == null) {
+                    final JCTree.JCClassDecl transformed = transformedRaw != null ? (JCTree.JCClassDecl) transformedRaw.getInternalRepresentation () : null;
+
+                    if (transformed != jcClassDecl) {
                         final JCTree parent = (JCTree) TreePath.getPath(compilationUnit, jcClassDecl).getParentPath().getLeaf(); //TODO is there a more efficient way to do this? jcClassDecl.sym.owner, but how to get the corresponding JCTree?!
 
-                        if (parent instanceof JCTree.JCCompilationUnit) {
-                            final JCTree.JCCompilationUnit parentCompilationUnit = (JCTree.JCCompilationUnit) parent;
-                            parentCompilationUnit.defs = ListHelper.without(parentCompilationUnit.defs, jcClassDecl);
+                        removeClassDecl (parent, jcClassDecl);
 
-                            //TODO un-enter?
+                        if (transformed != null) {
+                            addClassDecl (parent, transformed);
                         }
-                        else if (parent instanceof JCTree.JCClassDecl) {
-                            final JCTree.JCClassDecl parentClass = (JCTree.JCClassDecl) parent;
 
-                            parentClass.defs = ListHelper.without (parentClass.defs, jcClassDecl);
-
-                            final Scope parentScope = JcTreeHelper.getScope(jcClassDecl, enter);
-                            parentScope.remove (jcClassDecl.sym);
-                        }
-                        else {
-                            throw new IllegalStateException("unsupported owner of class declaration: " + parent.getClass().getName()); //TODO log.error
-                        }
-                    }
-                    else {
-                        final JCTree.JCClassDecl transformed = (JCTree.JCClassDecl) transformedRaw.getInternalRepresentation();
-                        if (transformed != jcClassDecl) {
-                            //TODO replace; enter; cancel loop of previous annotation macros
-                        }
+                        // cancel the loop through the original transformation annotations  TODO test this
+                        break;
                     }
                 }
             }
         }
 
         super.visitClassDef (jcClassDecl);
+    }
+
+    private void addClassDecl (JCTree parent, JCTree.JCClassDecl jcClassDecl) {
+        if (parent instanceof JCTree.JCCompilationUnit) {
+            final JCTree.JCCompilationUnit parentCompilationUnit = (JCTree.JCCompilationUnit) parent;
+            parentCompilationUnit.defs = parentCompilationUnit.defs.prepend (jcClassDecl);
+
+            try {
+                final Method classEnter = Enter.class.getDeclaredMethod ("classEnter", JCTree.class, Env.class); //TODO extract to field
+                classEnter.setAccessible (true);
+                classEnter.invoke (enter, jcClassDecl, enter.getTopLevelEnv (parentCompilationUnit));
+            }
+            catch (Exception e) {
+                throw new RuntimeException (e); //TODO error handling
+            }
+        }
+        else if (parent instanceof JCTree.JCClassDecl) {
+            final JCTree.JCClassDecl parentClass = (JCTree.JCClassDecl) parent;
+
+            parentClass.defs = parentClass.defs.prepend (jcClassDecl);
+//
+//            final Scope parentScope = JcTreeHelper.getScope(jcClassDecl, enter);
+//            parentScope.remove (jcClassDecl.sym);
+        }
+        else {
+            throw new IllegalStateException("unsupported owner of class declaration: " + parent.getClass().getName()); //TODO log.error
+        }
+    }
+
+    private void removeClassDecl (JCTree parent, JCTree.JCClassDecl jcClassDecl) {
+        check.compiled.remove (jcClassDecl.sym.flatname);
+
+        if (parent instanceof JCTree.JCCompilationUnit) {
+            final JCTree.JCCompilationUnit parentCompilationUnit = (JCTree.JCCompilationUnit) parent;
+            parentCompilationUnit.defs = ListHelper.without(parentCompilationUnit.defs, jcClassDecl);
+
+            //TODO un-enter?
+        }
+        else if (parent instanceof JCTree.JCClassDecl) {
+            final JCTree.JCClassDecl parentClass = (JCTree.JCClassDecl) parent;
+
+            parentClass.defs = ListHelper.without (parentClass.defs, jcClassDecl);
+
+            final Scope parentScope = JcTreeHelper.getScope(jcClassDecl, enter);
+            parentScope.remove (jcClassDecl.sym);
+        }
+        else {
+            throw new IllegalStateException("unsupported owner of class declaration: " + parent.getClass().getName()); //TODO log.error
+        }
     }
 
     //TODO annotation macros for methods,

@@ -11,6 +11,8 @@ import static org.junit.Assert.*;
  * @author arno
  */
 public class ReplaceClassTest {
+    @SuppressWarnings ("unused")
+    @ReplacePart
     class ReplacedNestedClass {
         public boolean original = true;
     }
@@ -40,6 +42,8 @@ public class ReplaceClassTest {
     }
 }
 
+@SuppressWarnings ("unused")
+@ReplacePart
 class ReplacedTopLevelClass {
     public boolean original = true;
 }

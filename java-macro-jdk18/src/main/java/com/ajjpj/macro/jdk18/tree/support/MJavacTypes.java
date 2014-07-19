@@ -7,6 +7,7 @@ import com.sun.tools.javac.jvm.ClassReader;
 import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.Names;
 
+
 /**
  * @author arno
  */
@@ -21,11 +22,15 @@ public class MJavacTypes implements MTypes {
         this.names = Names.instance (context);
     }
 
-    @Override public MJavacType stringType() {
-        return new MJavacType(syms.stringType);
+    @Override public MType intType () {
+        return new MJavacType (syms.intType);
+    }
+
+    @Override public MJavacType stringType () {
+        return new MJavacType (syms.stringType);
     }
 
     @Override public MType fromFqn (String fqn) {
-        return new MJavacType(classes.enterClass (names.fromString (fqn)).type);
+        return new MJavacType (classes.enterClass (names.fromString (fqn)).type);
     }
 }
