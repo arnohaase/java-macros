@@ -5,6 +5,7 @@ import com.ajjpj.macro.jdk18.tree.MJavacClassTree;
 import com.ajjpj.macro.jdk18.tree.expr.MJavacBinaryExpression;
 import com.ajjpj.macro.jdk18.tree.expr.MJavacLiteralExpression;
 import com.ajjpj.macro.jdk18.tree.stmt.MJavacBlockStatement;
+import com.ajjpj.macro.jdk18.tree.stmt.MJavacVariableDeclStatement;
 import com.ajjpj.macro.jdk18.tree.support.MJavacType;
 import com.ajjpj.macro.jdk18.tree.support.WrapperFactory;
 import com.ajjpj.macro.jdk18.util.ListHelper;
@@ -78,6 +79,16 @@ class JavacTreeMaker implements MTreeMaker {
         jcClassTree.defs = ListHelper.without (jcClassTree.defs, mtd);
     }
 
+    @Override public void addVariable (MClassTree cls, MVariableDeclTree variable) {
+        final JCTree.JCClassDecl jcClassTree = (JCTree.JCClassDecl) cls.getInternalRepresentation();
+        final JCTree.JCVariableDecl var = (JCTree.JCVariableDecl) variable.getInternalRepresentation();
+
+        new SourcePosSetter (jcClassTree.pos).scan (var);
+
+        jcClassTree.defs = jcClassTree.defs.prepend (var);
+        memberEnter (var, enter.getEnv (jcClassTree.sym));
+    }
+
     @Override public void removeVariable (MClassTree cls, MVariableDeclTree variable) {
         final JCTree.JCClassDecl jcClassTree = (JCTree.JCClassDecl) cls.getInternalRepresentation();
         final JCTree.JCVariableDecl var = (JCTree.JCVariableDecl) variable.getInternalRepresentation();
@@ -85,11 +96,11 @@ class JavacTreeMaker implements MTreeMaker {
         jcClassTree.defs = ListHelper.without (jcClassTree.defs, var);
     }
 
-    private void memberEnter(JCTree.JCMethodDecl synthetic, Env classEnv) {
+    private void memberEnter(JCTree syntheticMember, Env classEnv) {
         try {
             final Method reflectMethodForMemberEnter = memberEnter.getClass().getDeclaredMethod ("memberEnter", JCTree.class, Env.class);
             reflectMethodForMemberEnter.setAccessible (true);
-            reflectMethodForMemberEnter.invoke(memberEnter, synthetic, classEnv);
+            reflectMethodForMemberEnter.invoke(memberEnter, syntheticMember, classEnv);
         }
         catch (Exception e) {
             throw new RuntimeException(e); //TODO error handling
@@ -109,6 +120,19 @@ class JavacTreeMaker implements MTreeMaker {
 
         return new MJavacClassTree (inner);
     }
+
+    //TODO annotations
+    @Override public MVariableDeclTree Variable (String name, MType type, MModifiers modifiers, MExpressionTree<?> init) {
+        final JCTree.JCVariableDecl result = make.VarDef (
+                make.Modifiers (extractFlags (modifiers), com.sun.tools.javac.util.List.nil ()),
+                names.fromString (name),
+                make.Type (((MJavacType) type).getInternalRepresentation ()),
+                (JCTree.JCExpression) init.getInternalRepresentation ()
+        );
+
+        return new MJavacVariableDeclStatement (result);
+    }
+
 
     //TODO parameters
     //TODO annotations

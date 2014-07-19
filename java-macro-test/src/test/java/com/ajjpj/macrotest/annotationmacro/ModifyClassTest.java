@@ -11,6 +11,7 @@ import static org.junit.Assert.*;
 public class ModifyClassTest {
     @AddMethod class NestedWithAddedMethod {}
     @RemoveMethod class NestedWithRemovedMethod {void removed() {}}
+    @AddVariable static class NestedWithAddedVariable {}
     @RemoveVariable class NestedWithRemovedVariable {int removed = 42;}
 
     @Test public void testAddMethod () {
@@ -33,7 +34,8 @@ public class ModifyClassTest {
     }
 
     @Test public void testAddAttribute () {
-        fail ("TODO");
+        assertEquals (42, NestedWithAddedVariable.addedVar);
+        assertEquals (42, TopLevelWithAddedVariable.addedVar);
     }
 
     @Test public void testRemoveAttribute () {
@@ -53,5 +55,6 @@ public class ModifyClassTest {
 
 @AddMethod class TopLevelWithAddedMethod {}
 @RemoveMethod class TopLevelWithRemovedMethod {void removed() {}}
+@AddVariable class TopLevelWithAddedVariable {}
 @RemoveVariable class TopLevelWithRemovedVariable {int removed = 42;}
 
