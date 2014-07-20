@@ -82,7 +82,7 @@ public class MacroMethodInvoker extends TreeTranslator {
             int idx = 1;
             List<JCTree.JCExpression> argList = tree.getArguments();
             while(argList.nonEmpty()) {
-                args[idx] = WrapperFactory.wrap (argList.head);
+                args[idx] = WrapperFactory.wrap (compilationUnit, argList.head);
                 argList = argList.tail;
             }
 

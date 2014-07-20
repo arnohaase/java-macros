@@ -2,10 +2,12 @@ package com.ajjpj.macro.jdk18.tree;
 
 import com.ajjpj.macro.jdk18.tree.stmt.MJavacVariableDeclStatement;
 import com.ajjpj.macro.jdk18.tree.support.JavacModifiersView;
+import com.ajjpj.macro.jdk18.tree.support.JavacSourcePosition;
 import com.ajjpj.macro.tree.MClassTree;
 import com.ajjpj.macro.tree.MMethodTree;
 import com.ajjpj.macro.tree.stmt.MVariableDeclTree;
 import com.ajjpj.macro.tree.support.MModifiers;
+import com.ajjpj.macro.tree.support.MSourcePosition;
 import com.sun.tools.javac.tree.JCTree;
 
 import java.util.ArrayList;
@@ -16,9 +18,11 @@ import java.util.Collection;
  * @author arno
  */
 public class MJavacClassTree implements MClassTree {
-    private JCTree.JCClassDecl inner;
+    private final JCTree.JCCompilationUnit compilationUnit;
+    private final JCTree.JCClassDecl inner;
 
-    public MJavacClassTree (JCTree.JCClassDecl inner) {
+    public MJavacClassTree (JCTree.JCCompilationUnit compilationUnit, JCTree.JCClassDecl inner) {
+        this.compilationUnit = compilationUnit;
         this.inner = inner;
     }
 
@@ -40,7 +44,7 @@ public class MJavacClassTree implements MClassTree {
         for (JCTree def : inner.defs) {
             if (def instanceof JCTree.JCMethodDecl) {
                 final JCTree.JCMethodDecl mtd = (JCTree.JCMethodDecl) def;
-                result.add (new JavacMethodTree (mtd));
+                result.add (new JavacMethodTree (compilationUnit, mtd));
             }
         }
 
@@ -54,7 +58,7 @@ public class MJavacClassTree implements MClassTree {
             if (def instanceof JCTree.JCMethodDecl) {
                 final JCTree.JCMethodDecl mtd = (JCTree.JCMethodDecl) def;
                 if (name.equals (mtd.getName ().toString ())) {
-                    result.add (new JavacMethodTree (mtd));
+                    result.add (new JavacMethodTree (compilationUnit, mtd));
                 }
             }
         }
@@ -68,7 +72,7 @@ public class MJavacClassTree implements MClassTree {
         for (JCTree def : inner.defs) {
             if (def instanceof JCTree.JCVariableDecl) {
                 final JCTree.JCVariableDecl var = (JCTree.JCVariableDecl) def;
-                result.add (new MJavacVariableDeclStatement (var));
+                result.add (new MJavacVariableDeclStatement (compilationUnit, var));
             }
         }
 
@@ -80,11 +84,15 @@ public class MJavacClassTree implements MClassTree {
             if (def instanceof JCTree.JCVariableDecl) {
                 final JCTree.JCVariableDecl var = (JCTree.JCVariableDecl) def;
                 if (name.equals (var.getName ().toString ())) {
-                    return new MJavacVariableDeclStatement (var);
+                    return new MJavacVariableDeclStatement (compilationUnit, var);
                 }
             }
         }
 
         return null;
+    }
+
+    @Override public MSourcePosition getSourcePosition () {
+        return new JavacSourcePosition (compilationUnit, inner.pos);
     }
 }

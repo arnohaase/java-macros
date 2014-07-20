@@ -5,8 +5,6 @@ todo
 * generics in method macro signature: <T> expr<T> a (expr<T> in)
 * annotation macro: method
 * annotation macro: declarative composition
-* reflection for classes
-* make source position available to macros
 * cleaner build target structure
   * java-macro-runtime
   * java-macro-compiletime: assembly of java-macro-runtime, java-macro-jdk18, ... (--> for scope 'provided')
@@ -27,8 +25,6 @@ todo
   * test several macro methods in one class
   * test macro method in nested class
 
-* source position
-
 * samples / poc
   * method macros
     * log.debug(...) --> if(log.isDebug()) ...
@@ -47,17 +43,7 @@ todo
 * separate Javac / EJC implementation in MacroAnnotationProcessor
 
 * annotation macro
-  * transformation: interface with methods for type, method, variable, ...
-    * abstract implementation that delegates them all to a single method with throws UnsupportedOperationException (or equivalent error message)
-  * parameter: Class*WithHierarchy*, Method*WithHierarchy* etc. --> wrapper around (wrapped) AST node
-  * ifaces that wrap AST nodes: MClass, MMethod, MExpression, MLiteral, ...
-    * MClass has   List<MMethod> getMethods();
-      * provides a view, lazy wrapping
-      * 'add' does the MemberEnter magic
-      * 'remove' also cleans up internals
-
   * 'SequenceExpression' (comma operator from C) --> evaluate all, return the last
-
   * convenience: parser for with possibility to access 'context' ASTs - original AST, parameter / variable ASTs that are in scope, ...
 
 * support for modifying existing AST nodes, e.g. method or attribute visibility

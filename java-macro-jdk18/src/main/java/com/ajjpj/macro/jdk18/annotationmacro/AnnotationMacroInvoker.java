@@ -45,11 +45,11 @@ public class AnnotationMacroInvoker extends TreeScanner {
 
     @Override
     public void visitClassDef (final JCTree.JCClassDecl jcClassDecl) {
-        final JCTree.JCModifiers mods = jcClassDecl.getModifiers();
+        final JCTree.JCModifiers mods = jcClassDecl.getModifiers ();
 
         if (mods != null) {
-            for(JCTree.JCAnnotation annot: mods.getAnnotations()) {
-                final MClassTree tree = new MJavacClassTree(jcClassDecl);
+            for (JCTree.JCAnnotation annot : mods.getAnnotations ()) {
+                final MClassTree tree = new MJavacClassTree (compilationUnit, jcClassDecl);
                 final AnnotationMacro macro = annotationCache.getMacro (typeHelper.getAnnotationFqn (annot));
 
                 if (macro != null) {
@@ -57,7 +57,7 @@ public class AnnotationMacroInvoker extends TreeScanner {
                     final JCTree.JCClassDecl transformed = transformedRaw != null ? (JCTree.JCClassDecl) transformedRaw.getInternalRepresentation () : null;
 
                     if (transformed != jcClassDecl) {
-                        final JCTree parent = (JCTree) TreePath.getPath(compilationUnit, jcClassDecl).getParentPath().getLeaf(); //TODO is there a more efficient way to do this? jcClassDecl.sym.owner, but how to get the corresponding JCTree?!
+                        final JCTree parent = (JCTree) TreePath.getPath (compilationUnit, jcClassDecl).getParentPath ().getLeaf (); //TODO is there a more efficient way to do this? jcClassDecl.sym.owner, but how to get the corresponding JCTree?!
 
                         removeClassDecl (parent, jcClassDecl);
 
@@ -98,7 +98,7 @@ public class AnnotationMacroInvoker extends TreeScanner {
 //            parentScope.remove (jcClassDecl.sym);
         }
         else {
-            throw new IllegalStateException("unsupported owner of class declaration: " + parent.getClass().getName()); //TODO log.error
+            throw new IllegalStateException ("unsupported owner of class declaration: " + parent.getClass ().getName ()); //TODO log.error
         }
     }
 
@@ -107,7 +107,7 @@ public class AnnotationMacroInvoker extends TreeScanner {
 
         if (parent instanceof JCTree.JCCompilationUnit) {
             final JCTree.JCCompilationUnit parentCompilationUnit = (JCTree.JCCompilationUnit) parent;
-            parentCompilationUnit.defs = ListHelper.without(parentCompilationUnit.defs, jcClassDecl);
+            parentCompilationUnit.defs = ListHelper.without (parentCompilationUnit.defs, jcClassDecl);
 
             //TODO un-enter?
         }
@@ -116,11 +116,11 @@ public class AnnotationMacroInvoker extends TreeScanner {
 
             parentClass.defs = ListHelper.without (parentClass.defs, jcClassDecl);
 
-            final Scope parentScope = JcTreeHelper.getScope(jcClassDecl, enter);
+            final Scope parentScope = JcTreeHelper.getScope (jcClassDecl, enter);
             parentScope.remove (jcClassDecl.sym);
         }
         else {
-            throw new IllegalStateException("unsupported owner of class declaration: " + parent.getClass().getName()); //TODO log.error
+            throw new IllegalStateException ("unsupported owner of class declaration: " + parent.getClass ().getName ()); //TODO log.error
         }
     }
 

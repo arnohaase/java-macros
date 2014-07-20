@@ -21,7 +21,7 @@ public class JavacCompilerContext implements CompilerContext {
 
     public JavacCompilerContext (Context context, JCTree.JCCompilationUnit compilationUnit) {
         this.context = context;
-        treeMaker = new JavacTreeMaker (context);
+        treeMaker = new JavacTreeMaker (context, compilationUnit);
         log = Log.instance (context);
         enter = Enter.instance (context);
         this.compilationUnit = compilationUnit;
