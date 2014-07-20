@@ -13,12 +13,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-
     <dependencies>
+        <dependency>
+            <groupId>com.ajjpj.java-macro</groupId>
+            <artifactId>java-macro</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.eclipse.jdt.core.compiler</groupId>
             <artifactId>ecj</artifactId>
-            <version>4.3.1</version>
+            <version>4.4</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -44,6 +50,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>

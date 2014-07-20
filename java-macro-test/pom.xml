@@ -22,14 +22,21 @@
         </dependency>
         <dependency>
             <groupId>com.ajjpj.java-macro</groupId>
+            <artifactId>java-macro-sample</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ajjpj.java-macro</groupId>
             <artifactId>java-macro-jdk18</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.ajjpj.java-macro</groupId>
-            <artifactId>java-macro-sample</artifactId>
+            <artifactId>java-macro-ecj</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -47,8 +54,10 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <compilerId>javac</compilerId>
+                    <!--<compilerId>eclipse</compilerId>-->
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
                 <executions>
                     <execution>
@@ -58,6 +67,14 @@
                         </goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.plexus</groupId>
+                        <artifactId>plexus-compiler-eclipse</artifactId>
+                        <version>2.3</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

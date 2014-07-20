@@ -6,6 +6,7 @@ import com.ajjpj.macro.tree.MMethodTree;
 import com.ajjpj.macro.tree.MStatementTree;
 import com.ajjpj.macro.tree.MTree;
 import com.ajjpj.macro.tree.stmt.MBlockTree;
+import com.ajjpj.macro.tree.stmt.MVariableDeclTree;
 import com.ajjpj.macro.tree.support.MModifiersBuilderForClass;
 import com.ajjpj.macro.util.AbstractAnnotationMacro;
 
@@ -25,7 +26,7 @@ public class AddMethodMacroImpl extends AbstractAnnotationMacro {
                 "addedMethod",
                 context.types ().intType (),
                 new MModifiersBuilderForClass ().build (),
-                Collections.emptyList (),
+                Collections.<MVariableDeclTree> emptyList (),
                 body);
 
         context.treeMaker ().addMethod (tree, method);
